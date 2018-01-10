@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import Vue from 'vue';
 
 import V2DatePicker from '../src/index';

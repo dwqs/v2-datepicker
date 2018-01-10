@@ -2,13 +2,14 @@ const path = require('path');
 const webpack = require('webpack');
 const ParallelUglifyPlugin = require('webpack-parallel-uglify-plugin');
 const os = require('os');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 
 module.exports = {
     entry: {
         index: path.resolve(__dirname, './src/index')
     },
     output: {
-        path: path.join(__dirname, './dist'),
+        path: path.join(__dirname, './lib'),
         filename: '[name].js',
         library: 'V2DatePicker',
         libraryTarget: 'umd'
@@ -49,6 +50,7 @@ module.exports = {
                 mangle: true
             }
         }),
-        new webpack.optimize.ModuleConcatenationPlugin()
+        new webpack.optimize.ModuleConcatenationPlugin(),
+        new ProgressBarPlugin()
     ]
 }
