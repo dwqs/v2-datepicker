@@ -10,13 +10,102 @@
         <i :class="['v2-trigger-icon', { 'active': shown }]"></i>
         <transition name="zoom-in-top">
             <div class="v2-picker-panel-wrap" v-show="shown">
-                <div class="v2-picker-panel">v2-picker-panel</div>
+                <div class="v2-picker-panel">
+                    <div class="v2-picker-panel__header">
+                        <div class="v2-picker-header__label">
+                            <span class="v2-picker-header__label-year">2018 年</span>
+                            <span class="v2-picker-header__label-month">1 月</span>
+                        </div>
+                        <div class="v2-picker-header__toggle v2-picker-header__toggle-prev">
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-year"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-month"></i>
+                        </div>
+                        <div class="v2-picker-header__toggle v2-picker-header__toggle-next">
+                            <i class="v2-toggle-icon v2-toggle-icon__next-month"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__next-year"></i>
+                        </div>
+                    </div>
+                    <div class="v2-picker-panel__content">
+                        <div class="v2-picker-panel__week-label">
+                            <span v-for="day in weekDaysLabel" :key="day" v-text="day"></span>
+                        </div>
+                        <table cellspacing="0" cellpadding="0" class="v2-picker-panel__table v2-picker-panel__days-table">
+                            <tbody>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                                <tr>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                    <td class="v2-picker-panel__day">2</td>
+                                    <td class="v2-picker-panel__day">1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </transition>
     </div>
 </template>
 
 <script>
+    import locals from './locals';
+
     export default {
         name: 'v2-datepicker',
         props: {
@@ -49,7 +138,8 @@
             return {
                 view: 'day',
                 selected: '',
-                shown: false
+                shown: false,
+                days: []
             };
         },
 
@@ -59,10 +149,18 @@
             },
             _placeholder () {
                 return this.placeholder ? this.placeholder : this.lang === 'cn' ? '选择日期' : 'Choosing date...';
+            },
+
+            weekDaysLabel () {
+                return locals[this.lang] ? locals[this.lang].days : locals['cn'].days;
             }
         },
 
         methods: {
+            initDays () {
+
+            },
+
             getDefPlaceholder () {
                 if (type === 'daterange') {
                     return this.lang === 'cn' ? '开始时间 - 结束时间' : 'Choosing date...';
@@ -102,6 +200,7 @@
         },
 
         created () {
+            this.initDays();
             if (this.value) {
                 this.selected = this.value;
             }

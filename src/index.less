@@ -53,7 +53,7 @@
         width: 0;
         height: 0;
         border: 6px solid transparent;
-        border-top-color: #a1a4ad;
+        border-top-color: #ccc;
         transition: all .3s linear;
         transform-origin: center;
         &.active {
@@ -65,23 +65,178 @@
 
 .v2-picker-panel-wrap {
     position: absolute;
-    width: 120%;
+    min-width: 135%;
     z-index: 1500;
-    border: 1px solid #a1a4ad;
+    border: 1px solid #ccc;
     border-radius: 2px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 0 6px rgba(0,0,0,.04);
+    // box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 0 6px rgba(0,0,0,.04);
+    box-shadow: 0 2px 6px #ccc;
     box-sizing: border-box;
-    margin: 5px 0;
+    margin: 5px 0px;
+    padding: 0;
     overflow: hidden;
 }
 
 .v2-picker-panel {
     position: relative;
-    padding: 6px 0;
+    padding: 0;
     margin: 0;
     box-sizing: border-box;
     min-height: 275px;
     width: 100%;
     overflow: hidden;
+}
+
+.v2-picker-panel__header {
+    position: relative;
+    margin-top: 5px;
+    padding: 8px 8px 0 8px;
+    text-align: center;
+    .v2-picker-header__label {
+        font-size: 14px;
+        color: #333;
+        cursor: default;
+        span:last-child {
+            padding-left: 3px;
+        }
+    }
+}
+
+.v2-picker-header__toggle {
+    position: absolute;
+    z-index: 2;
+    top: 10px;
+    width: 45px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    font-size: 0;
+    &.v2-picker-header__toggle-prev {
+        left: 12px;
+        text-align: left;
+    }
+    &.v2-picker-header__toggle-next {
+        right: 12px;
+        text-align: right;
+    }
+}
+
+.v2-toggle-icon {
+    display: inline-block;
+    position: relative;
+    height: 16px;
+    width: 20px;
+    // E1E2E6
+    &.v2-toggle-icon__prev-year {
+        &::before, &::after {
+            position: absolute;
+            top: 2px;
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-top: 1px solid #8ea0b7;
+            border-left: 1px solid #8ea0b7;
+            transform: rotate(-45deg);
+        }
+        &::before {
+            left: 4px;
+        }
+        &::after {
+            left: 10px;
+        }
+    }
+    &.v2-toggle-icon__prev-month {
+        &::before {
+            position: absolute;
+            top: 2px;
+            left: 6px;
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-top: 1px solid #8ea0b7;
+            border-left: 1px solid #8ea0b7;
+            transform: rotate(-45deg);
+        }
+    }
+    &.v2-toggle-icon__next-month {
+        &::before {
+            position: absolute;
+            top: 2px;
+            right: 6px;
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-bottom: 1px solid #8ea0b7;
+            border-right: 1px solid #8ea0b7;
+            transform: rotate(-45deg);
+        }
+    }
+    &.v2-toggle-icon__next-year {
+        &::before, &::after {
+            position: absolute;
+            top: 2px;
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-bottom: 1px solid #8ea0b7;
+            border-right: 1px solid #8ea0b7;
+            transform: rotate(-45deg);
+        }
+        &::before {
+            right: 4px;
+        }
+        &::after {
+            right: 10px;
+        }
+    }
+}
+
+.v2-toggle-icon__prev-year, .v2-toggle-icon__next-year {
+    &:hover {
+        &::before, &::after {
+            border-color: #ff6200
+        }
+    }
+}
+
+.v2-toggle-icon__prev-month, .v2-toggle-icon__next-month {
+    &:hover {
+        &::before {
+            border-color: #ff6200
+        }
+    }
+}
+
+.v2-picker-panel__week-label {
+    position: relative;
+    cursor: default;
+    display: table-row;
+    span {
+        display: table-cell;
+        font-size: 12px;
+        text-align: center;
+        color: #A1A4AD;
+        font-weight: 400;
+        padding: 8px 10px;
+    }
+}
+
+.v2-picker-panel__content {
+    position: relative;
+    margin: 10px 8px;
+}
+
+.v2-picker-panel__table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.v2-picker-panel__day {
+    font-size: 14px;
+    text-align: center;
+    color: #333;
+    font-weight: 400;
+    padding: 8px;
+    cursor: pointer;
 }
