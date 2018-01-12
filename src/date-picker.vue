@@ -200,6 +200,7 @@
             selectdCurDate (cell) {
                 this.selectedDate = formatDate(cell.date, this.format);
                 this.curDate = cell.date;
+                this.$emit('input', this.selectedDate);
                 this.$emit('change', this.selectedDate);
                 this.shown = false;
             },
