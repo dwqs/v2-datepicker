@@ -38,11 +38,15 @@
     .v2-picker-trigger {
         position: relative;
         display: block;
-        font-size: 12px;
+        font-size: 14px;
         cursor: pointer;
         margin: 0;
         overflow: hidden;
-        padding: 7px 20px 7px 12px;
+        padding: 8px 20px 7px 12px;
+        &.empty-text {
+            padding: 7px 20px 7px 12px;
+            color: #c0c4cc
+        }
     }
     .v2-trigger-icon {
         position: absolute;
@@ -70,8 +74,7 @@
     border: 1px solid #ccc;
     border-radius: 2px;
     background-color: #fff;
-    // box-shadow: 0 2px 4px rgba(0,0,0,.12), 0 0 6px rgba(0,0,0,.04);
-    box-shadow: 0 2px 6px #ccc;
+    box-shadow: 0 4px 20px 1px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
     margin: 5px 0px;
     padding: 0;
@@ -214,11 +217,13 @@
     display: table-row;
     span {
         display: table-cell;
+        box-sizing: border-box;
         font-size: 12px;
         text-align: center;
         color: #A1A4AD;
         font-weight: 400;
         padding: 8px 10px;
+        border-bottom: 1px solid #edeef2;
     }
 }
 
@@ -228,15 +233,33 @@
 }
 
 .v2-picker-panel__table {
+    display: table;
     width: 100%;
     table-layout: fixed;
+    margin-top: 5px;
+    .v2-picker-panel__table-row {
+        display: table-row;
+    }
+    .v2-picker-panel__table-cell {
+        display: table-cell;
+    }
 }
 
 .v2-picker-panel__day {
     font-size: 14px;
     text-align: center;
-    color: #333;
     font-weight: 400;
     padding: 8px;
     cursor: pointer;
+    &.next-month, &.prev-month {
+        color: #c0c4cc
+    }
+    &.normal {
+        color: #333;
+    }
+    &.today, &.selected {
+        // background: #ff6200;
+        color: #ff6200;
+        // border-radius: 4px;
+    }
 }

@@ -5,15 +5,24 @@ export const isLeapYear = year => {
     return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 };
 
-export const daysOfMonth = (year, month) => {
+export const getDaysOfMonth = (year, month) => {
     if (isNaN(year) || isNaN(month)) {
-        throw new Error(`Parameter's value may be not a number`);
+        throw new Error(`daysOfMonth: parameter's value may be not a number`);
     }
-    return new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+
+    if ([3, 5, 8, 10].includes(month)) {
+        return 30;
+    }
+    
+    return month === 2 ? (isLeapYear(year) ? 29 : 28) : 31;
+};
+
+export const getDaysOfYear = year => {
+    return isLeapYear(year) ? 366 : 365;
 };
 
 export const isDate = date => {
-    if (date === null || date === undefined) {
+    if (!date) {
         return false;
     }
     if (isNaN(new Date(date).getTime())) {
@@ -24,6 +33,40 @@ export const isDate = date => {
   
 export const isDateObject = val => {
     return val instanceof Date;
+};
+
+export const getClearHoursTime = time => {
+    const temp = new Date(time);
+    temp.setHours(0, 0, 0, 0);
+    return temp.getTime();
+};
+
+export const getFirstDateOfMonth = date => {
+    if (isDate(date)) {
+        const temp = new Date(date.getTime());
+        temp.setDate(1);
+        temp.setHours(0, 0, 0, 0);
+        return temp;
+    }
+    throw new Error(`getFirstDateOfMonth: 1st parameter may be not a valid date`);
+};
+
+export const getLastDateOfMonth = date => {
+    if (isDate(date)) {
+        const temp = new Date(date.getTime());
+        const daysOfMonth = getDaysOfMonth(temp.getFullYear(), temp.getMonth() + 1);
+        temp.setDate(daysOfMonth);
+        temp.setHours(23, 59, 59, 999);
+        return temp;
+    }
+    throw new Error(`getLastDateOfMonth: 1st parameter may be not a valid date`);
+};
+
+export const nextDate = (date, offset = 1) => {
+    if (isDate(date)) {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset);
+    }
+    throw new Error(`nextDate: 1st parameter may be not a valid date`);
 };
 
 export const addZero = val => {
@@ -44,11 +87,11 @@ export const formatDate = (date, formatStr) => {
     str = str.replace(/M/g, date.getMonth() + 1);
     str = str.replace(/dd|DD/, addZero(date.getDate()));
     str = str.replace(/d|D/g, date.getDate());
-    str = str.replace(/hh|HH/, addZero(date.getHours()));
-    str = str.replace(/h|H/g, date.getHours());
-    str = str.replace(/mm/, addZero(date.getMinutes()));
-    str = str.replace(/m/g, date.getMinutes());
-    str = str.replace(/ss|SS/, addZero(date.getSeconds()));
-    str = str.replace(/s|S/g, date.getSeconds());
+    // str = str.replace(/hh|HH/, addZero(date.getHours()));
+    // str = str.replace(/h|H/g, date.getHours());
+    // str = str.replace(/mm/, addZero(date.getMinutes()));
+    // str = str.replace(/m/g, date.getMinutes());
+    // str = str.replace(/ss|SS/, addZero(date.getSeconds()));
+    // str = str.replace(/s|S/g, date.getSeconds());
     return str;
 };
