@@ -32,5 +32,23 @@ Vue.use(V2Datepicker)
 <v2-datepicker v-model="val" lang="en" format="yyyy-MM-DD"></v2-datepicker>
 ```
 
+More demo to visit [here](https://dwqs.github.io/v2-datepicker).
+
+## Available Props
+
+|  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
+|  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
+| value | Date | anything accepted by new Date | - | default date of the date-picker |
+| lang | String | cn(chinese)/en(english) | cn | set locals of the date-picker |
+| format | String | year `yyyy`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
+| placeholder | String | - | 选择日期/Choosing date... | placeholder text |
+
+## Event
+
+|  Event Name  |  Description  |  Parameters |
+|  :--:  |  :--:  |  :--: |
+| change | triggers when the selected value changes | component's binding value |
+
+
 ## LICENSE
 MIT
