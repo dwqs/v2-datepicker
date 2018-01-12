@@ -34,7 +34,7 @@
     "fix": "npx eslint --fix src/**/*.js src/**/*.vue",
     "commitmsg": "npx commitlint -e",
     "start": "npx parcel --port 3000 --open tpl.html",
-    "build": "rm -rf dist && NODE_ENV=production npx parcel build --public-url /v2-datepicker/dist tpl.html",
+    "build": "rm -rf dist && NODE_ENV=production npx parcel build tpl.html",
     "postbuild": "mv dist/tpl.html ./index.html"
   },
   "dependencies": {},
