@@ -63,18 +63,13 @@
     import { 
         nextDate, daysOfMonth, isDate,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
-        getClearHoursTime, formatDate
+        getClearHoursTime, formatDate, contains
     } from './utils';
 
     export default {
         name: 'v2-datepicker',
         props: {
             value: {},
-            type: {
-                type: String,
-                default: 'date',
-                validator: val => ['date', 'daterange'].includes(val)
-            },
             lang: {
                 type: String,
                 default: 'cn',
@@ -182,13 +177,6 @@
                 return classes.join(' ');
             },
 
-            getDefPlaceholder () {
-                if (type === 'daterange') {
-                    return this.lang === 'cn' ? '开始时间 - 结束时间' : 'Choosing date...';
-                }
-                return this.lang === 'cn' ? '选择日期' : 'Choosing date...';
-            },
-
             formatYearMonthText () {
                 // 2018&nbsp;年&nbsp;&nbsp;1&nbsp;月
                 const d = this.curDate;
@@ -217,25 +205,9 @@
                 this.shown = false;
             },
 
-            contains (root, target) {
-                // root 节点是否包含 target 节点
-                const isElement = Object.prototype.toString.call(root).includes('Element') && Object.prototype.toString.call(target).includes('Element');
-                if (!isElement) {
-                    return false;
-                }
-                let node = target;
-                while (node) {
-                    if (node === root) {
-                        return true;
-                    }
-                    node = node.parentNode;
-                }
-                return false;
-            },
-
             handleDocClick (e) {
                 const target = e.target;
-                if (!this.contains(this.$el, target) && this.shown) {
+                if (!contains(this.$el, target) && this.shown) {
                     this.shown = false;
                 }
             },
