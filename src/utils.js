@@ -95,3 +95,20 @@ export const formatDate = (date, formatStr) => {
     // str = str.replace(/s|S/g, date.getSeconds());
     return str;
 };
+
+// 节点包含
+export const contains = (root, target) => {
+    // root 节点是否包含 target 节点
+    const isElement = Object.prototype.toString.call(root).includes('Element') && Object.prototype.toString.call(target).includes('Element');
+    if (!isElement) {
+        return false;
+    }
+    let node = target;
+    while (node) {
+        if (node === root) {
+            return true;
+        }
+        node = node.parentNode;
+    }
+    return false;
+};
