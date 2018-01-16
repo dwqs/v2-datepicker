@@ -24,58 +24,40 @@
                 <div class="v2-picker-range-panel v2-picker-range__left-panel">
                     <div class="v2-picker-panel__header">
                         <div class="v2-picker-header__label">
-                            <!-- v-html="formatYearMonthText()" -->
-                            <span class="v2-picker-header__label-text">2017年12月</span>
+                            <span class="v2-picker-header__label-text" v-html="formatYearMonthText(1)"></span>
                         </div>
                         <div class="v2-picker-header__toggle v2-picker-header__toggle-prev">
-                            <i class="v2-toggle-icon v2-toggle-icon__prev-year"></i>
-                            <i class="v2-toggle-icon v2-toggle-icon__prev-month"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-year" @click="changeLeftYear(-1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-month" @click="changeLeftMonth(-1)"></i>
+                        </div>
+                        <div class="v2-picker-header__toggle v2-picker-header__toggle-next">
+                            <i class="v2-toggle-icon v2-toggle-icon__next-month" @click="changeLeftMonth(1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeLeftYear(1)"></i>
                         </div>
                     </div>
-                    <div class="v2-picker-panel__content">
-                        <div class="v2-picker-panel__week-label">
-                            <span v-for="day in weekDaysLabel" :key="day" v-text="day"></span>
-                        </div>
-                        <div class="v2-picker-panel__table v2-picker-panel__days-table">
-                            left table
-                            <!-- <div class="v2-picker-panel__table-row" v-for="(row, index) in rows" :key="index">
-                                <span v-for="cell in row" :key="cell.index"
-                                      :class="getCellClasses(cell)"
-                                      @click="selectdCurDate(cell)"
-                                    >
-                                    {{cell.text}}
-                                </span>
-                            </div> -->
-                        </div>
-                    </div>
+                    <date-table
+                        :lang="lange"
+                        :date="leftDate">
+                    </date-table>
                 </div>
                 <div class="v2-picker-range-panel v2-picker-range__right-panel">
                     <div class="v2-picker-panel__header">
                         <div class="v2-picker-header__label">
-                            <!-- v-html="formatYearMonthText()" -->
-                            <span class="v2-picker-header__label-text">2018年1月</span>
+                            <span class="v2-picker-header__label-text" v-html="formatYearMonthText(2)"></span>
+                        </div>
+                        <div class="v2-picker-header__toggle v2-picker-header__toggle-prev">
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-year" @click="changeRightYear(-1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-month" @click="changeRightMonth(-1)"></i>
                         </div>
                         <div class="v2-picker-header__toggle v2-picker-header__toggle-next">
-                            <i class="v2-toggle-icon v2-toggle-icon__next-month"></i>
-                            <i class="v2-toggle-icon v2-toggle-icon__next-year"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__next-month" @click="changeRightMonth(1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeRightYear(1)"></i>
                         </div>
                     </div>
-                    <div class="v2-picker-panel__content">
-                        <div class="v2-picker-panel__week-label">
-                            <span v-for="day in weekDaysLabel" :key="day" v-text="day"></span>
-                        </div>
-                        <div class="v2-picker-panel__table v2-picker-panel__days-table">
-                            right table
-                            <!-- <div class="v2-picker-panel__table-row" v-for="(row, index) in rows" :key="index">
-                                <span v-for="cell in row" :key="cell.index"
-                                      :class="getCellClasses(cell)"
-                                      @click="selectdCurDate(cell)"
-                                    >
-                                    {{cell.text}}
-                                </span>
-                            </div> -->
-                        </div>
-                    </div>
+                    <date-table
+                        :lang="lange"
+                        :date="rightDate">
+                    </date-table>
                 </div>
             </div>
         </transition>
@@ -86,8 +68,12 @@
     import locals from './locals';
 
     import { 
-        contains
+        nextDate, daysOfMonth, isDate, nextYear, nextMonth,
+        getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
+        getClearHoursTime, formatDate, contains
     } from './utils';
+
+    import DateTable from './date-table';
 
     export default {
         name: 'v2-datepicker-range',
@@ -107,6 +93,8 @@
                 default: '-'
             },
 
+            date: {},
+
             lang: {
                 type: String,
                 default: 'cn',
@@ -121,13 +109,19 @@
             placeholder: {
                 type: String,
                 default: '' 
+            },
+
+            unlinkPanels: {
+                // 是否取消左右面板的联动
+                type: Boolean,
+                default: false
             }
         },
 
         data () {
             return {
-                leftDate: '',
-                rightDate: '',
+                leftDate: new Date(),
+                rightDate: nextMonth(new Date(), 1),
                 shown: false,
                 selectedDate: ''
             };
@@ -136,14 +130,48 @@
         computed: {
             _placeholder () {
                 return this.placeholder ? this.placeholder : this.lang === 'cn' ? '开始时间 - 结束时间' : 'Choosing date range...';
-            },
-
-            weekDaysLabel () {
-                return locals[this.lang] ? locals[this.lang].days : locals['cn'].days;
             }
         },
 
         methods: {
+            formatYearMonthText (type) {
+                // 2018&nbsp;年&nbsp;&nbsp;1&nbsp;月
+                const d = type === 1 ? this.leftDate : this.rightDate;
+                if (this.lang === 'cn') {
+                    return `${d.getFullYear()}&nbsp;年&nbsp;&nbsp;${d.getMonth() + 1}&nbsp;月`;
+                } else if (this.lang === 'en') {
+                    return `${d.getFullYear()}&nbsp;&nbsp;${locals[this.lang].months.original[d.getMonth()]}`;
+                }
+            },
+
+            changeLeftMonth (delta) {
+                const leftDate = this.leftDate;
+                const rightDate = this.rightDate;
+                this.rightDate = nextMonth(rightDate, delta);
+                this.leftDate = nextMonth(leftDate, delta);
+            },
+
+            changeLeftYear (delta) {
+                const leftDate = this.leftDate;
+                const rightDate = this.rightDate;
+                this.rightDate = nextYear(rightDate, delta);
+                this.leftDate = nextYear(leftDate, delta);
+            },
+
+            changeRightMonth (delta) {
+                const leftDate = this.leftDate;
+                const rightDate = this.rightDate;
+                this.rightDate = nextMonth(rightDate, delta);
+                this.leftDate = nextMonth(leftDate, delta);
+            },
+
+            changeRightYear (delta) {
+                const leftDate = this.leftDate;
+                const rightDate = this.rightDate;
+                this.rightDate = nextYear(rightDate, delta);
+                this.leftDate = nextYear(leftDate, delta);
+            },
+
             handleDocClick (e) {
                 const target = e.target;
                 if (!contains(this.$el, target) && this.shown) {
@@ -159,12 +187,21 @@
             }
         },
 
+        created () {
+            console.log('left date', this.leftDate);
+            console.log('right date', this.rightDate);
+        },
+
         mounted () {
             window.document.addEventListener('click', this.handleDocClick, false);
         },
 
         beforeDestroy () {
             window.document.removeEventListener('click', this.handleDocClick);
+        },
+
+        components: {
+            DateTable
         }
     };
 </script>

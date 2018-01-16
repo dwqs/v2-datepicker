@@ -109,6 +109,7 @@
         cursor: default;
         span:last-child {
             padding-left: 3px;
+            font-weight: bold;
         }
     }
 }
@@ -256,18 +257,33 @@
     font-size: 14px;
     text-align: center;
     font-weight: 400;
-    padding: 8px;
+    // padding: 8px;
+    padding-left: 8px;
+    padding-top: 8px;
     cursor: pointer;
     &.next-month, &.prev-month {
         color: #c0c4cc
     }
     &.normal {
         color: #333;
+        &:hover {
+            color: #ff6200;
+        }
     }
-    &.today, &.selected {
-        // background: #ff6200;
+    &.today {
         color: #ff6200;
-        // border-radius: 4px;
+    }
+    span {
+        display: block;
+        text-align: center;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+    }
+    &.selected span {
+        color: #fff;
+        background: #ff6200;
+        border-radius: 50%;
     }
 }
 
@@ -297,5 +313,38 @@
     }
     &.v2-picker-range__right-panel {
 
+    }
+}
+
+.v2-picker-panel__range-day {
+    font-size: 14px;
+    text-align: center;
+    font-weight: 400;
+    padding-left: 8px;
+    padding-top: 8px;
+    cursor: pointer;
+    &.next-month, &.prev-month {
+        color: #c0c4cc
+    }
+    &.normal {
+        color: #333;
+        &:hover {
+            color: #ff6200;
+        }
+    }
+    &.today {
+        color: #ff6200;
+    }
+    span {
+        display: block;
+        text-align: center;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+    }
+    &.selected span {
+        color: #fff;
+        background: #ff6200;
+        border-radius: 50%;
     }
 }
