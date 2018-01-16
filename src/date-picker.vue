@@ -46,7 +46,7 @@
                                       :class="getCellClasses(cell)"
                                       @click="selectdCurDate(cell)"
                                     >
-                                    {{cell.text}}
+                                    <span v-text="cell.text"></span>
                                 </span>
                             </div>
                         </div>
@@ -135,8 +135,7 @@
                 const mod = (firstWeekDay + 7) % 7;
                 
                 const panelStartDate = new Date(curYear, curMonth, firstDateOfMonth.getDate() - (mod + 7));
-                const daysOfPreMonth = getDaysOfMonth(panelStartDate.getFullYear(), panelStartDate.getMonth() + 1);
-
+                // const daysOfPreMonth = getDaysOfMonth(panelStartDate.getFullYear(), panelStartDate.getMonth() + 1);
                 // firstWeekDay = (firstWeekDay === 0 ? 7 : firstWeekDay);
          
                 const rows = [[], [], [], [], [], [], []];
