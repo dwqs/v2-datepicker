@@ -6,7 +6,7 @@
             'is-disabled': disabled
         }
     ]">
-        <span ref="trigger" :class="['v2-picker-trigger', {'empty-text': !selectedDate}]" @click="handleTriggerClick">{{selectedDate ? selectedDate : _placeholder}}</span>
+        <span ref="trigger" :class="['v2-picker-trigger', {'empty-text': !selectedRange}]" @click="handleTriggerClick">{{selectedRange ? selectedRange : _placeholder}}</span>
         <svg class="v2-date-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
             <path d="M693.527273 460.8c32.581818 0 65.163636 0 97.745455 0 0-23.272727 0-41.890909 0-65.163636-37.236364 0-65.163636 0-97.745455 0C693.527273 418.909091 693.527273 437.527273 693.527273 460.8z" p-id="1933" fill="#797973"></path>
             <path d="M232.727273 623.709091c32.581818 0 65.163636 0 97.745455 0 0-23.272727 0-41.890909 0-65.163636-32.581818 0-65.163636 0-97.745455 0C232.727273 581.818182 232.727273 605.090909 232.727273 623.709091z" p-id="1934" fill="#797973"></path>
@@ -37,7 +37,10 @@
                     </div>
                     <date-table
                         :lang="lange"
-                        :date="leftDate">
+                        :date="leftDate"
+                        :min-date="startDate"
+                        :max-date="endDate"
+                        @range-change="handleRangeChange">
                     </date-table>
                 </div>
                 <div class="v2-picker-range-panel v2-picker-range__right-panel">
@@ -56,7 +59,10 @@
                     </div>
                     <date-table
                         :lang="lange"
-                        :date="rightDate">
+                        :date="rightDate"
+                        :min-date="startDate"
+                        :max-date="endDate"
+                        @range-change="handleRangeChange">
                     </date-table>
                 </div>
             </div>
@@ -79,8 +85,7 @@
         name: 'v2-datepicker-range',
         props: {
             value: {
-                type: Array,
-                default: []
+                
             },
 
             disabled: {
@@ -90,7 +95,7 @@
 
             rangeSeparator: {
                 type: String,
-                default: '-'
+                default: ' - '
             },
 
             date: {},
@@ -123,7 +128,11 @@
                 leftDate: new Date(),
                 rightDate: nextMonth(new Date(), 1),
                 shown: false,
-                selectedDate: ''
+                selectedRange: '',
+
+                selecting: false,
+                startDate: '',
+                endDate: ''
             };
         },
 
@@ -172,10 +181,36 @@
                 this.leftDate = nextYear(leftDate, delta);
             },
 
+            handleRangeChange (date) {
+                this.selecting = true;
+                if (!this.startDate) {
+                    this.startDate = formatDate(date, this.format);
+                    return;
+                }
+
+                if (!this.endDate) {
+                    this.endDate = formatDate(date, this.format);
+                }
+                const formate = [this.startDate, this.endDate];
+                this.selectedRange = formate.join(this.rangeSeparator);
+                this.$emit('input', formate);
+                this.$emit('change', formate);
+                this.shown = false;
+            },
+
+            resetDate () {
+                if (!this.startDate || !this.endDate) {
+                    this.startDate = '';
+                    this.endDate = '';
+                    this.selecting = false;
+                }
+            },
+
             handleDocClick (e) {
                 const target = e.target;
                 if (!contains(this.$el, target) && this.shown) {
                     this.shown = false;
+                    this.resetDate();
                 }
             },
 
@@ -183,6 +218,7 @@
                 if (this.disabled) {
                     return;
                 }
+                this.shown && this.resetDate();
                 this.shown = !this.shown;
             }
         },

@@ -31,12 +31,14 @@
 
             },
 
-            lang: String
+            lang: String,
+            minDate: '',
+            maxDate: ''
         },
 
         data () {
             return {
-                curDate: '',
+                curDate: null,
                 selectedDate: '',
                 rows: [[], [], [], [], [], []]
             };
@@ -52,8 +54,26 @@
             date (val) {
                 this.curDate = val;
             },
+
             curDate (val) {
-                this.initDays();
+                if (val) {
+                    this.initDays();
+                }
+            },
+
+            maxDate (val, oldVal) {
+                console.log('vvvvvvvv max', val);
+                if (!val) {
+                    this.curDate = new Date();
+                }
+            },
+
+            minDate (val, oldVal) {
+                console.log('vvvvvvvv min', val);
+                if (!val) {
+                    // this.curDate = new Date();
+                    // this.initDays();
+                }
             }
         },
 
@@ -78,9 +98,6 @@
                 const minTime = firstDateOfMonth.getTime();
                 const maxTime = lastDateOfMonth.getTime();
                 let index = 0;
-
-                console.log('ppppppsss', panelStartDate);
-                console.log('start and end', firstDateOfMonth, lastDateOfMonth);
 
                 for (let i = 0, l = rows.length; i < l; i++) {
                     const row = rows[i];
@@ -115,12 +132,14 @@
             },
 
             selectdCurDate (cell) {
-
+                this.curDate = cell.date;
+                this.selectedDate = formatDate(cell.date, this.format);
+                this.$emit('range-change', cell.date);
             }
         },  
 
         created () {
-            this.curDate = isDate(this.date) ? new Date(this.date) : new Date();
+            this.curDate = isDate(this.date) ? this.date : new Date();
         }
     };
 </script>
