@@ -10,7 +10,7 @@ export const getDaysOfMonth = (year, month) => {
         throw new Error(`daysOfMonth: parameter's value may be not a number`);
     }
 
-    if ([3, 5, 8, 10].includes(month)) {
+    if ([4, 6, 9, 11].includes(month)) {
         return 30;
     }
     
@@ -67,6 +67,20 @@ export const nextDate = (date, offset = 1) => {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset);
     }
     throw new Error(`nextDate: 1st parameter may be not a valid date`);
+};
+
+export const nextMonth = (date, offset = 1) => {
+    if (isDate(date)) {
+        return new Date(date.getFullYear(), date.getMonth() + offset, date.getDate());
+    }
+    throw new Error(`nextMonth: 1st parameter may be not a valid date`);
+};
+
+export const nextYear = (date, offset = 1) => {
+    if (isDate(date)) {
+        return new Date(date.getFullYear() + offset, date.getMonth(), date.getDate());
+    }
+    throw new Error(`nextYear: 1st parameter may be not a valid date`);
 };
 
 export const addZero = val => {

@@ -61,7 +61,7 @@
     import locals from './locals';
 
     import { 
-        nextDate, daysOfMonth, isDate,
+        nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
         getClearHoursTime, formatDate, contains
     } from './utils';
@@ -97,7 +97,7 @@
             return {
                 view: 'day',
                 selectedDate: '',
-                curDate: '',
+                curDate: new Date(),
                 shown: false,
                 rows: [[], [], [], [], [], [], []]
             };
@@ -189,12 +189,12 @@
 
             changeMonth (delta) {
                 const d = this.curDate;
-                this.curDate = new Date(d.getFullYear(), d.getMonth() + delta, d.getDate());
+                this.curDate = nextMonth(d, delta);
             },
 
             changeYear (delta) {
                 const d = this.curDate;
-                this.curDate = new Date(d.getFullYear() + delta, d.getMonth(), d.getDate());
+                this.curDate = nextYear(d, delta);
             },
 
             selectdCurDate (cell) {
@@ -221,12 +221,11 @@
         },
 
         created () {
-            if (!this.value || !isDate(this.value)) {
-                this.curDate = new Date(Date.now());
-            } else {
+            if (this.value && isDate(this.value)) {
                 this.curDate = new Date(this.value);
                 this.selectedDate = formatDate(this.curDate, this.format);
             }
+            this.initDays();
         },
 
         mounted () {
