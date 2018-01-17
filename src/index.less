@@ -229,7 +229,6 @@
         text-align: center;
         color: #A1A4AD;
         font-weight: 400;
-        padding: 8px 10px;
         border-bottom: 1px solid #edeef2;
     }
 }
@@ -237,6 +236,10 @@
 .v2-picker-panel__content {
     position: relative;
     margin: 10px 8px;
+}
+
+.v2-picker-panel__week-label span, .v2-picker-panel__day, .v2-picker-panel__range-day {
+    padding: 4px 6px;
 }
 
 .v2-picker-panel__table {
@@ -256,7 +259,6 @@
     font-size: 14px;
     text-align: center;
     font-weight: 400;
-    padding: 8px 10px;
     cursor: pointer;
     &.next-month, &.prev-month {
         color: #c0c4cc
@@ -292,7 +294,7 @@
 .v2-picker-range-panel-wrap {
     font-size: 0;
     box-sizing: border-box;
-    min-width: 270%;
+    min-width: 275%;
 }
 
 .v2-picker-range-panel {
@@ -317,8 +319,6 @@
     font-size: 14px;
     text-align: center;
     font-weight: 400;
-    padding-left: 8px;
-    padding-top: 8px;
     cursor: pointer;
     &.next-month, &.prev-month {
         color: #c0c4cc
@@ -360,9 +360,4 @@
         border-top-right-radius: 15px;
         border-bottom-right-radius: 15px;
     }
-    // &.selected span {
-    //     color: #fff;
-    //     background: #ff6200;
-    //     border-radius: 50%;
-    // }
 }

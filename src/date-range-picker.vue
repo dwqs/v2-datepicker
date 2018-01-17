@@ -36,7 +36,7 @@
                         </div>
                     </div>
                     <date-table
-                        :lang="lange"
+                        :lang="lang"
                         :date="leftDate"
                         :min-date="startDate"
                         :max-date="endDate"
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <date-table
-                        :lang="lange"
+                        :lang="lang"
                         :date="rightDate"
                         :min-date="startDate"
                         :max-date="endDate"
