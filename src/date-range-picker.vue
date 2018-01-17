@@ -33,7 +33,7 @@
                             <i class="v2-toggle-icon v2-toggle-icon__prev-year" @click="changeLeftYear(-1)"></i>
                             <i class="v2-toggle-icon v2-toggle-icon__prev-month" @click="changeLeftMonth(-1)"></i>
                         </div>
-                        <div class="v2-picker-header__toggle v2-picker-header__toggle-next">
+                        <div class="v2-picker-header__toggle v2-picker-header__toggle-next" v-if="unlinkPanels">
                             <i class="v2-toggle-icon v2-toggle-icon__next-month" @click="changeLeftMonth(1)"></i>
                             <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeLeftYear(1)"></i>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="v2-picker-header__label">
                             <span class="v2-picker-header__label-text" v-html="formatYearMonthText(2)"></span>
                         </div>
-                        <div class="v2-picker-header__toggle v2-picker-header__toggle-prev">
+                        <div class="v2-picker-header__toggle v2-picker-header__toggle-prev" v-if="unlinkPanels">
                             <i class="v2-toggle-icon v2-toggle-icon__prev-year" @click="changeRightYear(-1)"></i>
                             <i class="v2-toggle-icon v2-toggle-icon__prev-month" @click="changeRightMonth(-1)"></i>
                         </div>
@@ -169,30 +169,42 @@
 
             changeLeftMonth (delta) {
                 const leftDate = this.leftDate;
-                const rightDate = this.rightDate;
-                this.rightDate = nextMonth(rightDate, delta);
                 this.leftDate = nextMonth(leftDate, delta);
+
+                if (!this.unlinkPanels) {
+                    const rightDate = this.rightDate;
+                    this.rightDate = nextMonth(rightDate, delta);
+                }
             },
 
             changeLeftYear (delta) {
                 const leftDate = this.leftDate;
-                const rightDate = this.rightDate;
-                this.rightDate = nextYear(rightDate, delta);
                 this.leftDate = nextYear(leftDate, delta);
+
+                if (!this.unlinkPanels) {
+                    const rightDate = this.rightDate;
+                    this.rightDate = nextYear(rightDate, delta);
+                }
             },
 
             changeRightMonth (delta) {
-                const leftDate = this.leftDate;
                 const rightDate = this.rightDate;
                 this.rightDate = nextMonth(rightDate, delta);
-                this.leftDate = nextMonth(leftDate, delta);
+
+                if (!this.unlinkPanels) {
+                    const leftDate = this.leftDate;
+                    this.leftDate = nextMonth(leftDate, delta);
+                }
             },
 
             changeRightYear (delta) {
-                const leftDate = this.leftDate;
                 const rightDate = this.rightDate;
                 this.rightDate = nextYear(rightDate, delta);
-                this.leftDate = nextYear(leftDate, delta);
+
+                if (!this.unlinkPanels) {
+                    const leftDate = this.leftDate;
+                    this.leftDate = nextYear(leftDate, delta);
+                }
             },
 
             handleEndDateChange (date) {
