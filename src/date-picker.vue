@@ -167,7 +167,7 @@
             getCellClasses (cell) {
                 const classes = ['v2-picker-panel__table-cell', 'v2-picker-panel__day'];
                 classes.push(cell.type);
-                if (cell.isToday && !this.selectedDate) {
+                if (cell.isToday) {
                     classes.push('today');
                 }
                 if (cell.isSelected) {
