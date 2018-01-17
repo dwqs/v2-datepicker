@@ -36,16 +36,16 @@
                             <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeYear(1)"></i>
                         </div>
                     </div>
-                    <div class="v2-picker-panel__content v2-picker-panel__table v2-picker-panel__days-table">
+                    <div class="v2-picker-panel__content v2-picker-panel__table v2-picker-panel__days-table" @click="selectdCurDate">
                         <div class="v2-picker-panel__table-row v2-picker-panel__week-label">
                             <span v-for="day in weekDaysLabel" :key="day" v-text="day"></span>
                         </div>
                         <div class="v2-picker-panel__table-row" v-for="(row, index) in rows" :key="index">
                             <span v-for="cell in row" :key="cell.index"
                                     :class="getCellClasses(cell)"
-                                    @click="selectdCurDate(cell)"
+                                    :data-index="cell.index"
                                 >
-                                <span v-text="cell.text"></span>
+                                <span v-text="cell.text" :data-index="cell.index"></span>
                             </span>
                         </div>
                     </div>
@@ -194,12 +194,21 @@
                 this.curDate = nextYear(d, delta);
             },
 
-            selectdCurDate (cell) {
-                this.selectedDate = formatDate(cell.date, this.format);
-                this.curDate = cell.date;
-                this.$emit('input', this.selectedDate);
-                this.$emit('change', this.selectedDate);
-                this.shown = false;
+            getCellInfoByIndex (index) {
+                const rowIndex = Math.floor(index / 7);
+                const cellIndex = index % 7;
+                return this.rows[rowIndex][cellIndex];
+            },
+
+            selectdCurDate (e) {
+                if (e.target.dataset.index) {
+                    const cell = this.getCellInfoByIndex(e.target.dataset.index);
+                    this.selectedDate = formatDate(cell.date, this.format);
+                    this.curDate = cell.date;
+                    this.$emit('input', this.selectedDate);
+                    this.$emit('change', this.selectedDate);
+                    this.shown = false;
+                }
             },
 
             handleDocClick (e) {
