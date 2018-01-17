@@ -235,11 +235,11 @@
 
 .v2-picker-panel__content {
     position: relative;
-    margin: 10px 8px;
+    padding: 10px 8px;
 }
 
 .v2-picker-panel__week-label span, .v2-picker-panel__day, .v2-picker-panel__range-day {
-    padding: 4px 6px;
+    padding: 6px;
 }
 
 .v2-picker-panel__table {
@@ -294,7 +294,7 @@
 .v2-picker-range-panel-wrap {
     font-size: 0;
     box-sizing: border-box;
-    min-width: 275%;
+    min-width: 278%;
 }
 
 .v2-picker-range-panel {
@@ -319,12 +319,13 @@
     font-size: 14px;
     text-align: center;
     font-weight: 400;
-    cursor: pointer;
     &.next-month, &.prev-month {
-        color: #c0c4cc
+        color: #c0c4cc;
+        cursor: default;
     }
     &.normal {
         color: #333;
+        cursor: pointer;
         &:hover {
             color: #ff6200;
         }
