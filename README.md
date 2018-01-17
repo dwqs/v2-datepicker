@@ -56,7 +56,7 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 | placeholder | String | - | 开始时间-结束时间/Choosing date range... | placeholder text |
 | disabled | Boolean | - | false | disabled daterange-picker |
 | range-separator | String | - | '-' | range separator|
-| unlink-panels | boolean | - | false | unlink two date-panels in range-picker|
+| unlink-panels | Boolean | - | false | unlink two date-panels in range-picker|
 
 ## Event
 
