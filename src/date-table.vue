@@ -33,7 +33,11 @@
 
             lang: String,
             minDate: '',
-            maxDate: ''
+            maxDate: '',
+            selecting: {
+                type: Boolean,
+                default: false
+            }
         },
 
         data () {
@@ -64,20 +68,54 @@
             maxDate (val, oldVal) {
                 console.log('vvvvvvvv max', val);
                 if (!val) {
-                    this.curDate = new Date();
+                    // this.curDate = new Date();
                 }
             },
 
             minDate (val, oldVal) {
-                console.log('vvvvvvvv min', val);
                 if (!val) {
+                    console.log('vvvvvvvv min', val, oldVal);
+                    // this.selectedDate = '';
                     // this.curDate = new Date();
                     // this.initDays();
+                }
+            },
+
+            selecting (val, oldVal) {
+                console.log('ssssss selcte', val);
+                if (!val) {
+                    // this.curDate = isDate(this.date) ? this.date : new Date();
+                    // this.selectedDate = '';
                 }
             }
         },
 
         methods: {
+            isInRange (date) {
+                if (isDate(this.minDate) && isDate(this.maxDate)) {
+                    const time = date.getTime();
+                    return time >= getClearHoursTime(new Date(this.minDate).getTime()) && time <= getClearHoursTime(new Date(this.maxDate).getTime());
+                }
+
+                return false;
+            },
+
+            isStartDate (date) {
+                if (isDate(this.minDate)) {
+                    const time = date.getTime();
+                    return time === getClearHoursTime(new Date(this.minDate).getTime());
+                }
+                return false;
+            },
+
+            isEndDate (date) {
+                if (isDate(this.maxDate)) {
+                    const time = date.getTime();
+                    return time === getClearHoursTime(new Date(this.maxDate).getTime());
+                }
+                return false;
+            },
+
             initDays () {
                 const date = this.curDate;
 
@@ -112,6 +150,11 @@
                         cell.isToday = time === getClearHoursTime(Date.now());
                         cell.isSelected = isDate(this.selectedDate) ? time === getClearHoursTime(new Date(this.selectedDate).getTime()) : false;
                         cell.date = d;
+
+                        cell.start = this.isStartDate(d);
+                        cell.end = this.isEndDate(d);
+                        cell.inRange = this.isInRange(d);
+
                         row.push(cell);
                     }
                     rows[i] = row;
@@ -122,9 +165,20 @@
             getCellClasses (cell) {
                 const classes = ['v2-picker-panel__table-cell', 'v2-picker-panel__range-day'];
                 classes.push(cell.type);
-                if (cell.isToday && !this.selectedDate) {
+                if (cell.isToday) {
                     classes.push('today');
                 }
+
+                if (cell.inRange) {
+                    classes.push('in-range');
+                }
+                if (cell.start) {
+                    classes.push('start-date');
+                }
+                if (cell.end) {
+                    classes.push('end-date');
+                }
+
                 if (cell.isSelected) {
                     classes.push('selected');
                 }

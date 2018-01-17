@@ -40,6 +40,7 @@
                         :date="leftDate"
                         :min-date="startDate"
                         :max-date="endDate"
+                        :selecting="selecting"
                         @range-change="handleRangeChange">
                     </date-table>
                 </div>
@@ -62,6 +63,7 @@
                         :date="rightDate"
                         :min-date="startDate"
                         :max-date="endDate"
+                        :selecting="selecting"
                         @range-change="handleRangeChange">
                     </date-table>
                 </div>
@@ -128,11 +130,11 @@
                 leftDate: new Date(),
                 rightDate: nextMonth(new Date(), 1),
                 shown: false,
-                selectedRange: '',
 
                 selecting: false,
-                startDate: '',
-                endDate: ''
+                selectedRange: '',
+                startDate: '2018/1/18',
+                endDate: '2018/1/27'
             };
         },
 
@@ -182,7 +184,10 @@
             },
 
             handleRangeChange (date) {
-                this.selecting = true;
+                if (!this.selecting) {
+                    this.selecting = true;
+                }
+
                 if (!this.startDate) {
                     this.startDate = formatDate(date, this.format);
                     return;
@@ -196,13 +201,14 @@
                 this.$emit('input', formate);
                 this.$emit('change', formate);
                 this.shown = false;
+                this.resetDate(true);
             },
 
-            resetDate () {
-                if (!this.startDate || !this.endDate) {
+            resetDate (force = false) {
+                if (!this.startDate || !this.endDate || force) {
+                    this.selecting = false;
                     this.startDate = '';
                     this.endDate = '';
-                    this.selecting = false;
                 }
             },
 

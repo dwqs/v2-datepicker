@@ -342,9 +342,30 @@
         height: 24px;
         line-height: 24px;
     }
-    &.selected span {
-        color: #fff;
-        background: #ff6200;
-        border-radius: 50%;
+    &.in-range {
+        background-color: #ffefe5;
+        &:hover {
+            background-color: #ffd0b3;
+        }
     }
+    &.start-date, &.end-date {
+        span {
+            color: #fff;
+            background: #ff6200;
+            border-radius: 50%;
+        }
+    }
+    &.start-date {
+        border-top-left-radius: 15px;
+        border-bottom-left-radius: 15px;
+    }
+    &.end-date {
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    // &.selected span {
+    //     color: #fff;
+    //     background: #ff6200;
+    //     border-radius: 50%;
+    // }
 }
