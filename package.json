@@ -1,6 +1,6 @@
 {
   "name": "v2-datepicker",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "A simple datepicker component based Vue 2.x",
   "author": "dwqs",
   "license": "MIT",
@@ -20,7 +20,9 @@
     "date",
     "date-picker",
     "datepicker",
-    "calendar"
+    "calendar",
+    "date range",
+    "datepicker range"
   ],
   "files": [
     "lib",
