@@ -5,8 +5,11 @@
         {
             'is-disabled': disabled
         }
-    ]">
+    ]" @mouseover="shownClear=true" @mouseout="shownClear=false">
         <span ref="trigger" :class="['v2-picker-trigger', {'empty-text': !selectedRange}]" @click="handleTriggerClick">{{selectedRange ? selectedRange : _placeholder}}</span>
+        <svg v-if="selectedRange && shownClear" @click="clearDate" class="v2-date-clear" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
+            <path d="M479.072 512l-98.72-98.72c-9.152-9.152-9.088-23.84 0-32.928 9.152-9.152 23.84-9.088 32.928 0l98.72 98.72 98.72-98.72c9.152-9.152 23.84-9.088 32.928 0 9.152 9.152 9.088 23.84 0 32.928l-98.72 98.72 98.72 98.72c9.152 9.152 9.088 23.84 0 32.928-9.152 9.152-23.84 9.088-32.928 0l-98.72-98.72-98.72 98.72c-9.152 9.152-23.84 9.088-32.928 0-9.152-9.152-9.088-23.84 0-32.928l98.72-98.72zM512 837.824c179.936 0 325.824-145.888 325.824-325.824s-145.888-325.824-325.824-325.824c-179.936 0-325.824 145.888-325.824 325.824s145.888 325.824 325.824 325.824z" p-id="3296" fill="#cdcdcd"></path>
+        </svg>
         <svg class="v2-date-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
             <path d="M693.527273 460.8c32.581818 0 65.163636 0 97.745455 0 0-23.272727 0-41.890909 0-65.163636-37.236364 0-65.163636 0-97.745455 0C693.527273 418.909091 693.527273 437.527273 693.527273 460.8z" p-id="1933" fill="#797973"></path>
             <path d="M232.727273 623.709091c32.581818 0 65.163636 0 97.745455 0 0-23.272727 0-41.890909 0-65.163636-32.581818 0-65.163636 0-97.745455 0C232.727273 581.818182 232.727273 605.090909 232.727273 623.709091z" p-id="1934" fill="#797973"></path>
@@ -132,6 +135,7 @@
                 leftDate: new Date(),
                 rightDate: nextMonth(new Date(), 1),
                 shown: false,
+                shownClear: false,
 
                 selecting: false,
                 clickCount: 0,
@@ -148,6 +152,11 @@
         },
 
         methods: {
+            clearDate () {
+                this.selectedRange = '';
+                this.resetDate(true);
+            },
+
             formatYearMonthText (type) {
                 // 2018&nbsp;年&nbsp;&nbsp;1&nbsp;月
                 const d = type === 1 ? this.leftDate : this.rightDate;
