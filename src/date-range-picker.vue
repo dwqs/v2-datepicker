@@ -141,7 +141,8 @@
                 clickCount: 0,
                 selectedRange: '',
                 startDate: '',
-                endDate: ''
+                endDate: '',
+                defVal: [] // 保存初次显示的默认值
             };
         },
 
@@ -151,9 +152,28 @@
             }
         },
 
+        watch: {
+            value (val) {
+                if (Array.isArray(val) && val.length === 2) {
+                    this.setDefRange();
+                }
+            }
+        },
+
         methods: {
+            setDefRange () {
+                this.startDate = isDate(this.value[0]) ? formatDate(new Date(this.value[0]), this.format) : '';
+                this.endDate = isDate(this.value[1]) ? formatDate(new Date(this.value[1]), this.format) : '';
+                if (this.startDate && this.endDate) {
+                    const formate = [this.startDate, this.endDate];
+                    this.selectedRange = formate.join(this.rangeSeparator);
+                    this.defVal = this.value;
+                }
+            },
+
             clearDate () {
                 this.selectedRange = '';
+                this.defVal = [];
                 this.$emit('input', []);
                 this.$emit('change', []);
                 this.resetDate();
@@ -234,12 +254,13 @@
                 this.shown = false;
                 this.selecting = false;
                 this.clickCount = 0;
+                this.defVal = [];
             },
 
             resetDate () {
                 this.selecting = false;
-                this.startDate = '';
-                this.endDate = '';
+                this.startDate = this.defVal[0] ? this.startDate : '';
+                this.endDate = this.defVal[1] ? this.endDate : '';
                 this.clickCount = 0;
             },
 
@@ -257,6 +278,12 @@
                 }
                 this.shown && this.resetDate();
                 this.shown = !this.shown;
+            }
+        },
+
+        created () {
+            if (Array.isArray(this.value) && this.value.length === 2) {
+                this.setDefRange();
             }
         },
 

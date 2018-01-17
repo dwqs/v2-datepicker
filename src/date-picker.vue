@@ -118,10 +118,21 @@
         watch: {
             curDate (val) {
                 this.initDays();
+            },
+
+            value (val) {
+                if (isDate(val)) {
+                    this.setDefDate();
+                }
             }
         },
 
         methods: {
+            setDefDate () {
+                this.curDate = new Date(this.value);
+                this.selectedDate = formatDate(this.curDate, this.format);
+            },
+
             clearDate () {
                 this.selectedDate = ''; 
                 this.$emit('input', this.selectedDate);
@@ -239,8 +250,7 @@
 
         created () {
             if (this.value && isDate(this.value)) {
-                this.curDate = new Date(this.value);
-                this.selectedDate = formatDate(this.curDate, this.format);
+                this.setDefDate();
             }
             this.initDays();
         },

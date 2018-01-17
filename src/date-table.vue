@@ -68,7 +68,7 @@
             maxDate (val, oldVal) {
                 if (val) {
                     this.markRange();
-                } else if (!val && oldVal) {
+                } else if (oldVal) {
                     // clear 操作
                     this.markRange(val);
                 }
@@ -76,8 +76,8 @@
 
             minDate (val, oldVal) {
                 if (val) {
-                    this.markRange(val);
-                } else if (!val && oldVal) {
+                    this.markRange(this.selecting ? val : undefined);
+                } else if (oldVal) {
                     // clear 操作
                     this.markRange(val);
                 }
@@ -206,9 +206,14 @@
             },
 
             markRange (maxDate) {
-                if (!maxDate) {
+                if (maxDate === undefined) {
+                    maxDate = this.maxDate || this.minDate || Date.now();
+                } 
+
+                if (!maxDate && typeof maxDate === 'string') {
                     maxDate = this.maxDate;
                 }
+
                 const maxTime = getClearHoursTime(maxDate);
                 const minTime = getClearHoursTime(this.minDate);
                 const rows = this.rows;
