@@ -154,6 +154,8 @@
         methods: {
             clearDate () {
                 this.selectedRange = '';
+                this.$emit('input', []);
+                this.$emit('change', []);
                 this.resetDate();
             },
 

@@ -124,6 +124,8 @@
         methods: {
             clearDate () {
                 this.selectedDate = ''; 
+                this.$emit('input', this.selectedDate);
+                this.$emit('change', this.selectedDate);
                 this.initDays();
             },
 
