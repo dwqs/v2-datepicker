@@ -86,7 +86,7 @@
         getClearHoursTime, formatDate, contains
     } from './utils';
 
-    import DateTable from './date-table';
+    import DateTable from './date-table.vue';
 
     export default {
         name: 'v2-datepicker-range',
