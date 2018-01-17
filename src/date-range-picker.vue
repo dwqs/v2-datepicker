@@ -41,6 +41,7 @@
                         :min-date="startDate"
                         :max-date="endDate"
                         :selecting="selecting"
+                        @end-date-change="handleEndDateChange"
                         @range-change="handleRangeChange">
                     </date-table>
                 </div>
@@ -64,6 +65,7 @@
                         :min-date="startDate"
                         :max-date="endDate"
                         :selecting="selecting"
+                        @end-date-change="handleEndDateChange"
                         @range-change="handleRangeChange">
                     </date-table>
                 </div>
@@ -132,9 +134,10 @@
                 shown: false,
 
                 selecting: false,
+                clickCount: 0,
                 selectedRange: '',
-                startDate: '2018/1/18',
-                endDate: '2018/1/27'
+                startDate: '',
+                endDate: ''
             };
         },
 
@@ -183,17 +186,22 @@
                 this.leftDate = nextYear(leftDate, delta);
             },
 
+            handleEndDateChange (date) {
+                this.endDate = formatDate(date, this.format);
+            },
+
             handleRangeChange (date) {
+                this.clickCount = this.clickCount + 1;
                 if (!this.selecting) {
                     this.selecting = true;
                 }
 
-                if (!this.startDate) {
+                if (this.clickCount === 1) {
                     this.startDate = formatDate(date, this.format);
                     return;
                 }
 
-                if (!this.endDate) {
+                if (this.clickCount === 2) {
                     this.endDate = formatDate(date, this.format);
                 }
                 const formate = [this.startDate, this.endDate];
@@ -201,7 +209,9 @@
                 this.$emit('input', formate);
                 this.$emit('change', formate);
                 this.shown = false;
-                this.resetDate(true);
+                this.selecting = false;
+                this.clickCount = 0;
+                // this.resetDate(true);
             },
 
             resetDate (force = false) {

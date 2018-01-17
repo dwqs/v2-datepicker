@@ -1,14 +1,16 @@
 <template>
-    <div class="v2-picker-panel__content v2-picker-panel__table v2-picker-panel__days-table">
+    <div class="v2-picker-panel__content v2-picker-panel__table v2-picker-panel__days-table" 
+        @click="selectdCurDate"
+        @mousemove="handleMouseMove">
         <div class="v2-picker-panel__table-row v2-picker-panel__week-label">
             <span v-for="day in weekDaysLabel" :key="day" v-text="day"></span>
         </div>
-        <div class="v2-picker-panel__table-row" v-for="(row, index) in rows" :key="index">
+        <div class="v2-picker-panel__table-row" v-for="(row, j) in rows" :key="j">
             <span v-for="cell in row" :key="cell.index"
                     :class="getCellClasses(cell)"
-                    @click="selectdCurDate(cell)"
+                    :data-index="cell.index"
                 >
-                <span v-text="cell.text"></span>
+                <span v-text="cell.text" :data-index="cell.index"></span>
             </span>
         </div>
     </div>
@@ -64,26 +66,14 @@
             },
 
             maxDate (val, oldVal) {
-                console.log('vvvvvvvv max', val);
-                if (!val) {
-                    // this.curDate = new Date();
+                if (val) {
+                    this.markRange();
                 }
             },
 
             minDate (val, oldVal) {
-                if (!val) {
-                    console.log('vvvvvvvv min', val, oldVal);
-                    // this.selectedDate = '';
-                    // this.curDate = new Date();
-                    // this.initDays();
-                }
-            },
-
-            selecting (val, oldVal) {
-                console.log('ssssss selcte', val);
-                if (!val) {
-                    // this.curDate = isDate(this.date) ? this.date : new Date();
-                    // this.selectedDate = '';
+                if (val) {
+                    this.markRange(val);
                 }
             }
         },
@@ -163,30 +153,84 @@
             getCellClasses (cell) {
                 const classes = ['v2-picker-panel__table-cell', 'v2-picker-panel__range-day'];
                 classes.push(cell.type);
-                if (cell.isToday) {
-                    classes.push('today');
-                }
 
-                if (cell.inRange) {
-                    classes.push('in-range');
-                }
-                if (cell.start) {
-                    classes.push('start-date');
-                }
-                if (cell.end) {
-                    classes.push('end-date');
-                }
+                if (cell.type === 'normal') {
+                    if (cell.isToday) {
+                        classes.push('today');
+                    }
+                    if (cell.inRange) {
+                        classes.push('in-range');
+                    }
+                    if (cell.start) {
+                        classes.push('start-date');
+                    }
+                    if (cell.end) {
+                        classes.push('end-date');
+                    }
 
-                if (cell.isSelected) {
-                    classes.push('selected');
+                    if (cell.isSelected) {
+                        classes.push('selected');
+                    }
                 }
                 return classes.join(' ');
             },
 
-            selectdCurDate (cell) {
-                this.curDate = cell.date;
-                this.selectedDate = formatDate(cell.date, this.format);
-                this.$emit('range-change', cell.date);
+            getCellInfoByIndex (index) {
+                const rowIndex = Math.floor(index / 7);
+                const cellIndex = index % 7;
+                return this.rows[rowIndex][cellIndex];
+            },
+
+            selectdCurDate (e) {
+                if (e.target.dataset.index) {
+                    const cell = this.getCellInfoByIndex(e.target.dataset.index);
+                    if (cell.type === 'normal') {
+                        const minTime = getClearHoursTime(this.minDate);
+                        const maxTime = getClearHoursTime(cell.date.getTime());
+
+                        if (maxTime < minTime && this.selecting) {
+                            return;
+                        }
+
+                        this.curDate = cell.date;
+                        this.selectedDate = formatDate(cell.date, this.format);
+                        this.$emit('range-change', cell.date);
+                    }
+                }
+            },
+
+            markRange (maxDate) {
+                if (!maxDate) {
+                    maxDate = this.maxDate;
+                }
+                const maxTime = getClearHoursTime(maxDate);
+                const minTime = getClearHoursTime(this.minDate);
+                const rows = this.rows;
+
+                for (let i = 0, l = rows.length; i < l; i++) {
+                    const row = rows[i];
+                    for (let j = 0; j < 7; j++) {
+                        const cell = row[j];
+                        const d = cell.date;
+                        const time = d.getTime();
+
+                        cell.start = time === minTime;
+                        cell.end = time === maxTime && maxTime > minTime;
+                        cell.inRange = time >= minTime && time <= maxTime;
+                    }               
+                    rows[i] = row;
+                }
+                this.rows = [].concat(rows);
+            },
+
+            handleMouseMove (e) {
+                if (this.selecting) {
+                    if (e.target.dataset.index) {
+                        const index = e.target.dataset.index;
+                        const cell = this.getCellInfoByIndex(index);
+                        this.$emit('end-date-change', cell.date);
+                    }
+                }
             }
         },  
 
