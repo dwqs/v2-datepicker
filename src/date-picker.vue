@@ -36,19 +36,17 @@
                             <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeYear(1)"></i>
                         </div>
                     </div>
-                    <div class="v2-picker-panel__content">
-                        <div class="v2-picker-panel__week-label">
+                    <div class="v2-picker-panel__content v2-picker-panel__table v2-picker-panel__days-table">
+                        <div class="v2-picker-panel__table-row v2-picker-panel__week-label">
                             <span v-for="day in weekDaysLabel" :key="day" v-text="day"></span>
                         </div>
-                        <div class="v2-picker-panel__table v2-picker-panel__days-table">
-                            <div class="v2-picker-panel__table-row" v-for="(row, index) in rows" :key="index">
-                                <span v-for="cell in row" :key="cell.index"
-                                      :class="getCellClasses(cell)"
-                                      @click="selectdCurDate(cell)"
-                                    >
-                                    <span v-text="cell.text"></span>
-                                </span>
-                            </div>
+                        <div class="v2-picker-panel__table-row" v-for="(row, index) in rows" :key="index">
+                            <span v-for="cell in row" :key="cell.index"
+                                    :class="getCellClasses(cell)"
+                                    @click="selectdCurDate(cell)"
+                                >
+                                <span v-text="cell.text"></span>
+                            </span>
                         </div>
                     </div>
                 </div>
