@@ -36,12 +36,27 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 
 ## Available Props
 
+### The v2-datepicker component
+
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Date | anything accepted by new Date | - | default date of the date-picker |
 | lang | String | cn(chinese)/en(english) | cn | set local language of the date-picker |
-| format | String | year `yyyy`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
+| format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 选择日期/Choosing date... | placeholder text |
+| disabled | Boolean | - | false | disabled date-picker |
+
+### The v2-daterange-picker component
+
+|  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
+|  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
+| value | Array | anything accepted by new Date | - | default date of the daterange-picker |
+| lang | String | cn(chinese)/en(english) | cn | set local language of the daterange-picker |
+| format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
+| placeholder | String | - | 开始时间-结束时间/Choosing date range... | placeholder text |
+| disabled | Boolean | - | false | disabled daterange-picker |
+| range-separator | String | - | '-' | range separator|
+| unlink-panels | boolean | - | false | unlink two date-panels in range-picker|
 
 ## Event
 
