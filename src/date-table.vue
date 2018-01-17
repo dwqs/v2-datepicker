@@ -75,10 +75,12 @@
             },
 
             minDate (val, oldVal) {
-                console.log('vvvvv  min', val, oldVal);
                 if (val) {
                     this.markRange(val);
-                } 
+                } else if (!val && oldVal) {
+                    // clear 操作
+                    this.markRange(val);
+                }
             }
         },
 

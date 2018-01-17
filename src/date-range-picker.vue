@@ -7,7 +7,7 @@
         }
     ]" @mouseover="shownClear=true" @mouseout="shownClear=false">
         <span ref="trigger" :class="['v2-picker-trigger', {'empty-text': !selectedRange}]" @click="handleTriggerClick">{{selectedRange ? selectedRange : _placeholder}}</span>
-        <svg v-if="selectedRange && shownClear" @click="clearDate" class="v2-date-clear" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
+        <svg v-if="selectedRange && shownClear" @click.stop="clearDate" class="v2-date-clear" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
             <path d="M479.072 512l-98.72-98.72c-9.152-9.152-9.088-23.84 0-32.928 9.152-9.152 23.84-9.088 32.928 0l98.72 98.72 98.72-98.72c9.152-9.152 23.84-9.088 32.928 0 9.152 9.152 9.088 23.84 0 32.928l-98.72 98.72 98.72 98.72c9.152 9.152 9.088 23.84 0 32.928-9.152 9.152-23.84 9.088-32.928 0l-98.72-98.72-98.72 98.72c-9.152 9.152-23.84 9.088-32.928 0-9.152-9.152-9.088-23.84 0-32.928l98.72-98.72zM512 837.824c179.936 0 325.824-145.888 325.824-325.824s-145.888-325.824-325.824-325.824c-179.936 0-325.824 145.888-325.824 325.824s145.888 325.824 325.824 325.824z" p-id="3296" fill="#cdcdcd"></path>
         </svg>
         <svg class="v2-date-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
@@ -154,7 +154,7 @@
         methods: {
             clearDate () {
                 this.selectedRange = '';
-                this.resetDate(true);
+                this.resetDate();
             },
 
             formatYearMonthText (type) {
@@ -220,15 +220,13 @@
                 this.shown = false;
                 this.selecting = false;
                 this.clickCount = 0;
-                // this.resetDate(true);
             },
 
-            resetDate (force = false) {
-                if (!this.startDate || !this.endDate || force) {
-                    this.selecting = false;
-                    this.startDate = '';
-                    this.endDate = '';
-                }
+            resetDate () {
+                this.selecting = false;
+                this.startDate = '';
+                this.endDate = '';
+                this.clickCount = 0;
             },
 
             handleDocClick (e) {
@@ -246,11 +244,6 @@
                 this.shown && this.resetDate();
                 this.shown = !this.shown;
             }
-        },
-
-        created () {
-            console.log('left date', this.leftDate);
-            console.log('right date', this.rightDate);
         },
 
         mounted () {

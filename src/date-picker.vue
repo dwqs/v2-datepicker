@@ -124,6 +124,7 @@
         methods: {
             clearDate () {
                 this.selectedDate = ''; 
+                this.initDays();
             },
 
             initDays () {
