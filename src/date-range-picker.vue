@@ -141,8 +141,7 @@
                 clickCount: 0,
                 selectedRange: '',
                 startDate: '',
-                endDate: '',
-                defVal: [] // 保存初次显示的默认值
+                endDate: ''
             };
         },
 
@@ -167,16 +166,15 @@
                 if (this.startDate && this.endDate) {
                     const formate = [this.startDate, this.endDate];
                     this.selectedRange = formate.join(this.rangeSeparator);
-                    this.defVal = this.value;
                 }
             },
 
             clearDate () {
                 this.selectedRange = '';
-                this.defVal = [];
+                this.startDate = '';
+                this.endDate = '';
                 this.$emit('input', []);
                 this.$emit('change', []);
-                this.resetDate();
             },
 
             formatYearMonthText (type) {
@@ -254,21 +252,12 @@
                 this.shown = false;
                 this.selecting = false;
                 this.clickCount = 0;
-                this.defVal = [];
-            },
-
-            resetDate () {
-                this.selecting = false;
-                this.startDate = this.defVal[0] ? this.startDate : '';
-                this.endDate = this.defVal[1] ? this.endDate : '';
-                this.clickCount = 0;
             },
 
             handleDocClick (e) {
                 const target = e.target;
                 if (!contains(this.$el, target) && this.shown) {
                     this.shown = false;
-                    this.resetDate();
                 }
             },
 
@@ -276,7 +265,6 @@
                 if (this.disabled) {
                     return;
                 }
-                this.shown && this.resetDate();
                 this.shown = !this.shown;
             }
         },
