@@ -1,28 +1,29 @@
 <template>
     <div class="v2-datepicker-demo">
-        <h3>日期选择：{{selectedDate}}</h3>
-        <v2-datepicker v-model="selectedDate"></v2-datepicker>
-        <h3>日期区间选择：{{dateRange}}</h3>
-        <v2-datepicker-range v-model="dateRange"></v2-datepicker-range>
+        <v-header></v-header>
+        <v-start></v-start>
+        <v-main></v-main>
     </div>
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-                selectedDate: '',
-                dateRange: []
-            };
-        },
+    import Header from './components/header/index.vue';
+    import Start from './components/start/index.vue';
+    import Main from './components/main/index.vue';
 
-        watch: {
-            selectedDate (val) {
-                console.log('111111--------selectedDate', val);
-            },
-            dateRange (val) {
-                console.log('222222--------dateRange', val);
-            }
+    export default {
+        components: {
+            'v-header': Header,
+            'v-start': Start,
+            'v-main': Main
         }
     };
 </script>
+
+<style>
+    .v2-datepicker-demo {
+        width: 960px;
+        height: 200px;
+        margin: 0 auto;
+    }
+</style>
