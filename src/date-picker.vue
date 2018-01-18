@@ -223,8 +223,10 @@
             },
 
             selectdCurDate (e) {
-                if (e.target.dataset.index) {
-                    const cell = this.getCellInfoByIndex(e.target.dataset.index);
+                // Compatible IE9 ~ IE10
+                const index = e.target.dataset ? e.target.dataset.index : e.target.getAttribute('data-index');
+                if (index) {
+                    const cell = this.getCellInfoByIndex(index);
                     this.selectedDate = formatDate(cell.date, this.format);
                     this.curDate = cell.date;
                     this.$emit('input', this.selectedDate);

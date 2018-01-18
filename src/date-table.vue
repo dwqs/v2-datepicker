@@ -188,8 +188,10 @@
             },
 
             selectdCurDate (e) {
-                if (e.target.dataset.index) {
-                    const cell = this.getCellInfoByIndex(e.target.dataset.index);
+                // Compatible IE9 ~ IE10
+                const index = e.target.dataset ? e.target.dataset.index : e.target.getAttribute('data-index');
+                if (index) {
+                    const cell = this.getCellInfoByIndex(index);
                     if (cell.type === 'normal') {
                         const minTime = getClearHoursTime(this.minDate);
                         const maxTime = getClearHoursTime(cell.date.getTime());
