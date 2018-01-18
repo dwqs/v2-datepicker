@@ -196,13 +196,9 @@
                         const minTime = getClearHoursTime(this.minDate);
                         const maxTime = getClearHoursTime(cell.date.getTime());
 
-                        if (maxTime < minTime && this.selecting) {
-                            return;
-                        }
-
                         this.curDate = cell.date;
                         this.selectedDate = formatDate(cell.date, this.format);
-                        this.$emit('range-change', cell.date);
+                        this.$emit('range-change', cell.date, maxTime < minTime);
                     }
                 }
             },

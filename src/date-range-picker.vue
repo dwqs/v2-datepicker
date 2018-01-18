@@ -231,7 +231,11 @@
                 this.endDate = formatDate(date, this.format);
             },
 
-            handleRangeChange (date) {
+            handleRangeChange (date, isResetStartDate) {
+                if (isResetStartDate) {
+                    this.clickCount = 0;
+                } 
+
                 this.clickCount = this.clickCount + 1;
                 if (!this.selecting) {
                     this.selecting = true;
