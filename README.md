@@ -64,6 +64,17 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 |  :--:  |  :--:  |  :--: |
 | change | triggers when the selected value changes | component's binding value |
 
+## Development
+
+```js
+git clone git@github.com:dwqs/v2-datepicker.git
+
+cd v2-datepicker
+
+npm i 
+
+npm start
+```
 
 ## LICENSE
 MIT
