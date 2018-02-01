@@ -11,6 +11,29 @@
   transform: scaleY(0);
 }
 
+.v2-picker-panel__sidebar {
+    position: absolute;
+    background: #fff;
+    width: 110px;
+    height: 100%;
+    border-right: 1px solid #edeef2;
+    box-sizing: border-box;
+    padding-top: 7px;
+    cursor: default;
+    span {
+        display: block;
+        color: #333;
+        font-size: 14px;
+        line-height: 28px;
+        text-align: left;
+        padding-left: 12px;
+        cursor: pointer;
+        &:hover {
+            color: #ff6200;
+        }
+    }
+}
+
 // 日期选择 -- start
 .v2-date-wrap {
     position: relative;
@@ -303,13 +326,13 @@
     font-size: 0;
     box-sizing: border-box;
     // min-width: 278%;
-    width: 540px;
+    // width: 540px;
     height: 295px;
 }
 
 .v2-picker-range-panel {
     position: relative;
-    width: 50%;
+    // width: 50%;
     display: inline-block;
     padding: 0;
     margin: 0;
