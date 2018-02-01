@@ -263,11 +263,13 @@
             },
 
             handleShortcutPick (date) {
-                this.selectedDate = formatDate(date, this.format);
-                this.curDate = date;
-                this.$emit('input', this.selectedDate);
-                this.$emit('change', this.selectedDate);
-                this.shown = false;
+                if (isDate(date)) {
+                    this.selectedDate = formatDate(date, this.format);
+                    this.curDate = date;
+                    this.$emit('input', this.selectedDate);
+                    this.$emit('change', this.selectedDate);
+                    this.shown = false;
+                }
             }
         },
 
