@@ -68,7 +68,7 @@
         getClearHoursTime, formatDate, contains
     } from './utils';
 
-    import ShortCuts from './shortcuts';
+    import ShortCuts from './shortcuts.vue';
 
     export default {
         name: 'v2-datepicker',

@@ -88,7 +88,7 @@
     } from './utils';
 
     import DateTable from './date-table.vue';
-    import ShortCuts from './shortcuts';
+    import ShortCuts from './shortcuts.vue';
 
     export default {
         name: 'v2-datepicker-range',
