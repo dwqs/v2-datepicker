@@ -27,9 +27,67 @@ Vue.use(V2Datepicker)
 ```
 // basic
 <v2-datepicker v-model="val"></v2-datepicker>
+<v2-datepicker-range v-model="val2"></v2-datepicker-range>
 
 //setting
-<v2-datepicker v-model="val" lang="en" format="yyyy-MM-DD"></v2-datepicker>
+<v2-datepicker-range v-model="val" lang="en" format="yyyy-MM-DD" :picker-options="pickerOptions"></v2-datepicker-range>
+<v2-datepicker v-model="val2" format="yyyy-MM-DD" :picker-options="pickerOptions2"></v2-datepicker>
+
+export default {
+    data () {
+        return {
+            pickerOptions: {
+                    shortcuts: [{
+                        text: '最近一周',
+                        onClick (picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近一月',
+                        onClick (picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }, {
+                        text: '最近三月',
+                        onClick (picker) {
+                            const end = new Date();
+                            const start = new Date();
+                            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                            picker.$emit('pick', [start, end]);
+                        }
+                    }]
+                },
+            pickerOptions2: {
+                shortcuts: [{
+                    text: '今天',
+                    onClick (picker) {
+                        picker.$emit('pick', new Date());
+                    }
+                }, {
+                    text: '昨天',
+                    onClick (picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24);
+                        picker.$emit('pick', date);
+                    }
+                }, {
+                    text: '一周前',
+                    onClick (picker) {
+                        const date = new Date();
+                        date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit('pick', date);
+                    }
+                }]
+            }
+        }
+    }
+}
 ```
 
 More demo to visit [here](https://dwqs.github.io/v2-datepicker).
@@ -45,6 +103,7 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 选择日期/Choosing date... | placeholder text |
 | disabled | Boolean | - | false | disabled date-picker |
+| picker-options | Object | - | {} | additional options, check the table below |
 
 ### The v2-daterange-picker component
 
@@ -57,6 +116,20 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 | disabled | Boolean | - | false | disabled daterange-picker |
 | range-separator | String | - | '-' | range separator|
 | unlink-panels | Boolean | - | false | unlink two date-panels in range-picker|
+| picker-options | Object | - | {} | additional options, check the table below |
+
+## Picker Options
+
+|  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
+|  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
+| text | String | - | - | title of the shortcut |
+| onClick | Function | - | - | callback function, triggers when the shortcut is clicked |
+
+### shortcuts
+
+|  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
+|  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
+| shortcuts | Object[] | - | - | a { text, onClick } object array to set shortcut options, check the table below |
 
 ## Event
 
