@@ -24,11 +24,6 @@
         </svg>
         <transition name="zoom-in-top">
             <div class="v2-picker-panel-wrap v2-picker-range-panel-wrap" v-show="shown" :style="{minWidth: minWidth + 'px'}">
-                <!-- <div class="v2-picker-panel__sidebar" v-if="shownSideBar">
-                    <span v-for="(shortcut, index) in pickerOptions.shortcuts" :key="index" @click="handleShortcutClick(shortcut)">
-                        {{shortcut.text || ''}}
-                    </span>
-                </div> -->
                 <short-cuts v-if="shownSideBar" :shortcuts="pickerOptions.shortcuts" @pick="handleShortcutPick"></short-cuts>
                 <div class="v2-picker-range-panel v2-picker-range__left-panel" :style="{marginLeft: shownSideBar ? '110px' : '0'}">
                     <div class="v2-picker-panel__header">
@@ -138,7 +133,9 @@
 
             pickerOptions: {
                 type: Object,
-                default: () => {}
+                default: () => {
+                    return {};
+                }
             }
         },
 
