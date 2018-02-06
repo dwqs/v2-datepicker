@@ -14,6 +14,6 @@ const V2DatePicker = {
 
 export default V2DatePicker;
 
-if (typeof window !== undefined && window.Vue) {
+if (typeof window !== 'undefined' && window.Vue) {
     window.Vue.use(V2DatePicker);
 }
