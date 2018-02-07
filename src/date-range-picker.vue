@@ -140,9 +140,16 @@
         },
 
         data () {
+            let leftDate = this.initLeftDate();
+            let rightDate = this.initRightDate();
+
+            if (leftDate.getTime() > rightDate.getTime()) {
+                [leftDate, rightDate] = [rightDate, leftDate];
+            }
+
             return {
-                leftDate: new Date(),
-                rightDate: nextMonth(new Date(), 1),
+                leftDate: leftDate,
+                rightDate: rightDate,
                 shown: false,
                 shownClear: false,
                 minWidth: 540,
@@ -171,10 +178,30 @@
         },
 
         methods: {
+            initLeftDate () {
+                if (Array.isArray(this.value) && this.value.length === 2) {
+                    return isDate(this.value[0]) ? new Date(this.value[0]) : new Date();
+                }
+                return new Date();
+            },
+
+            initRightDate () {
+                if (Array.isArray(this.value) && this.value.length === 2) {
+                    return isDate(this.value[1]) ? new Date(this.value[1]) : nextMonth(new Date(), 1);
+                }
+                return nextMonth(new Date(), 1);
+            },
+
             setDefRange () {
-                this.startDate = isDate(this.value[0]) ? formatDate(new Date(this.value[0]), this.format) : '';
-                this.endDate = isDate(this.value[1]) ? formatDate(new Date(this.value[1]), this.format) : '';
-                if (this.startDate && this.endDate) {
+                let startDate = isDate(this.value[0]) ? new Date(this.value[0]) : '';
+                let endDate = isDate(this.value[1]) ? new Date(this.value[1]) : '';
+                if (startDate && endDate) {
+                    if (startDate.getTime() > endDate.getTime()) {
+                        [startDate, endDate] = [endDate, startDate];
+                    }
+
+                    this.startDate = formatDate(startDate, this.format);
+                    this.endDate = formatDate(endDate, this.format);
                     const formate = [this.startDate, this.endDate];
                     this.selectedRange = formate.join(this.rangeSeparator);
                 }
