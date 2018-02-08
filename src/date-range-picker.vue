@@ -140,16 +140,12 @@
         },
 
         data () {
-            let leftDate = this.initLeftDate();
-            let rightDate = this.initRightDate();
-
-            if (leftDate.getTime() > rightDate.getTime()) {
-                [leftDate, rightDate] = [rightDate, leftDate];
-            }
+            const MONTH = 1000 * 3600 * 24 * 30;
+            const [initLeftDate, initRightDate] = this.initDate(MONTH);
 
             return {
-                leftDate: leftDate,
-                rightDate: rightDate,
+                leftDate: initLeftDate,
+                rightDate: initRightDate,
                 shown: false,
                 shownClear: false,
                 minWidth: 540,
@@ -159,7 +155,9 @@
                 clickCount: 0,
                 selectedRange: '',
                 startDate: '',
-                endDate: ''
+                endDate: '',
+
+                MONTH: MONTH
             };
         },
 
@@ -178,18 +176,24 @@
         },
 
         methods: {
-            initLeftDate () {
+            initDate (MONTH) {
                 if (Array.isArray(this.value) && this.value.length === 2) {
-                    return isDate(this.value[0]) ? new Date(this.value[0]) : new Date();
-                }
-                return new Date();
-            },
+                    let leftDate = isDate(this.value[0]) ? new Date(this.value[0]) : new Date();
+                    let rightDate = isDate(this.value[1]) ? new Date(this.value[1]) : nextMonth(new Date(), 1);
 
-            initRightDate () {
-                if (Array.isArray(this.value) && this.value.length === 2) {
-                    return isDate(this.value[1]) ? new Date(this.value[1]) : nextMonth(new Date(), 1);
+                    if (leftDate.getTime() > rightDate.getTime()) {
+                        [leftDate, rightDate] = [rightDate, leftDate];
+                    }
+                    const diff = rightDate.getTime() - leftDate.getTime();
+
+                    if (!this.unlinkPanels && diff > MONTH) {
+                        rightDate = nextMonth(leftDate, 1);
+                    }
+
+                    return [leftDate, rightDate];
                 }
-                return nextMonth(new Date(), 1);
+
+                return [new Date(), nextMonth(new Date(), 1)];
             },
 
             setDefRange () {
@@ -200,9 +204,9 @@
                         [startDate, endDate] = [endDate, startDate];
                     }
 
-                    this.startDate = formatDate(startDate, this.format);
-                    this.endDate = formatDate(endDate, this.format);
-                    const formate = [this.startDate, this.endDate];
+                    this.startDate = startDate;
+                    this.endDate = endDate;
+                    const formate = [formatDate(this.startDate, this.format), formatDate(this.endDate, this.format)];
                     this.selectedRange = formate.join(this.rangeSeparator);
                 }
             },
@@ -270,13 +274,16 @@
             },
 
             emitValue () {
-                const formate = [this.startDate, this.endDate];
+                const formate = [formatDate(this.startDate, this.format), formatDate(this.endDate, this.format)];
                 this.selectedRange = formate.join(this.rangeSeparator);
-                this.$emit('input', formate);
-                this.$emit('change', formate);
+                this.$emit('input', [this.startDate, this.endDate]);
+                this.$emit('change', [this.startDate, this.endDate]);
                 this.shown = false;
                 this.selecting = false;
                 this.clickCount = 0;
+                this.$nextTick(() => {
+                    [this.leftDate, this.rightDate] = this.initDate(this.MONTH);
+                });
             },
 
             handleRangeChange (date, isResetStartDate) {
@@ -290,12 +297,12 @@
                 }
 
                 if (this.clickCount === 1) {
-                    this.startDate = formatDate(date, this.format);
+                    this.startDate = date; // formatDate(date, this.format);
                     return;
                 }
 
                 if (this.clickCount === 2) {
-                    this.endDate = formatDate(date, this.format);
+                    this.endDate = date; // formatDate(date, this.format);
                 }
                 this.emitValue();
             },
@@ -316,8 +323,8 @@
 
             handleShortcutPick (range) {
                 if (Array.isArray(range) && range.length === 2) {
-                    this.startDate = formatDate(range[0], this.format);
-                    this.endDate = formatDate(range[1], this.format);
+                    this.startDate = range[0];
+                    this.endDate = range[1];
                     this.emitValue();
                 }
             }
