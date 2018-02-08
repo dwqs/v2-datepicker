@@ -242,8 +242,8 @@
                     const cell = this.getCellInfoByIndex(index);
                     this.selectedDate = formatDate(cell.date, this.format);
                     this.curDate = cell.date;
-                    this.$emit('input', this.selectedDate);
-                    this.$emit('change', this.selectedDate);
+                    this.$emit('input', this.curDate);
+                    this.$emit('change', this.curDate);
                     this.shown = false;
                 }
             },
@@ -266,8 +266,8 @@
                 if (isDate(date)) {
                     this.selectedDate = formatDate(date, this.format);
                     this.curDate = date;
-                    this.$emit('input', this.selectedDate);
-                    this.$emit('change', this.selectedDate);
+                    this.$emit('input', this.curDate);
+                    this.$emit('change', this.curDate);
                     this.shown = false;
                 }
             }
