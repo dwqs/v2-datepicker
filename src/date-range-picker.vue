@@ -31,12 +31,22 @@
                             <span class="v2-picker-header__label-text" v-html="formatYearMonthText(1)"></span>
                         </div>
                         <div class="v2-picker-header__toggle v2-picker-header__toggle-prev">
-                            <i class="v2-toggle-icon v2-toggle-icon__prev-year" @click="changeLeftYear(-1)"></i>
-                            <i class="v2-toggle-icon v2-toggle-icon__prev-month" @click="changeLeftMonth(-1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-year v2-toggle-icon__left-prev-year" @click="changeLeftYear(-1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__prev-month v2-toggle-icon__left-prev-month" @click="changeLeftMonth(-1)"></i>
                         </div>
                         <div class="v2-picker-header__toggle v2-picker-header__toggle-next" v-if="unlinkPanels">
-                            <i class="v2-toggle-icon v2-toggle-icon__next-month" @click="changeLeftMonth(1)"></i>
-                            <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeLeftYear(1)"></i>
+                            <i :class="[
+                                'v2-toggle-icon v2-toggle-icon__next-month v2-toggle-icon__left-next-month',
+                                {
+                                    'v2-toggle-icon-disabled': disableLinkMonth
+                                }
+                            ]" @click="changeLeftMonth(1)"></i>
+                            <i :class="[
+                                'v2-toggle-icon v2-toggle-icon__next-year v2-toggle-icon__left-next-year',
+                                {
+                                    'v2-toggle-icon-disabled': disableLinkYear
+                                }
+                            ]" @click="changeLeftYear(1)"></i>
                         </div>
                     </div>
                     <date-table
@@ -55,12 +65,22 @@
                             <span class="v2-picker-header__label-text" v-html="formatYearMonthText(2)"></span>
                         </div>
                         <div class="v2-picker-header__toggle v2-picker-header__toggle-prev" v-if="unlinkPanels">
-                            <i class="v2-toggle-icon v2-toggle-icon__prev-year" @click="changeRightYear(-1)"></i>
-                            <i class="v2-toggle-icon v2-toggle-icon__prev-month" @click="changeRightMonth(-1)"></i>
+                            <i :class="[
+                                'v2-toggle-icon v2-toggle-icon__prev-year v2-toggle-icon__right-prev-year',
+                                {
+                                    'v2-toggle-icon-disabled': disableLinkYear
+                                }
+                            ]" @click="changeRightYear(-1)"></i>
+                            <i :class="[
+                                'v2-toggle-icon v2-toggle-icon__prev-month v2-toggle-icon__right-prev-month',
+                                {
+                                    'v2-toggle-icon-disabled': disableLinkMonth
+                                }
+                            ]" @click="changeRightMonth(-1)"></i>
                         </div>
                         <div class="v2-picker-header__toggle v2-picker-header__toggle-next">
-                            <i class="v2-toggle-icon v2-toggle-icon__next-month" @click="changeRightMonth(1)"></i>
-                            <i class="v2-toggle-icon v2-toggle-icon__next-year" @click="changeRightYear(1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__next-month v2-toggle-icon__right-next-month" @click="changeRightMonth(1)"></i>
+                            <i class="v2-toggle-icon v2-toggle-icon__next-year v2-toggle-icon__right-next-year" @click="changeRightYear(1)"></i>
                         </div>
                     </div>
                     <date-table
@@ -156,6 +176,8 @@
                 selectedRange: '',
                 startDate: '',
                 endDate: '',
+                disableLinkMonth: false, // whether link when unlinkPanels is true for closed months.
+                disableLinkYear: false, // whether link when unlinkPanels is true for closed years.
 
                 MONTH: MONTH
             };
@@ -196,6 +218,30 @@
                 return [new Date(), nextMonth(new Date(), 1)];
             },
 
+            changeLinkStatus (leftDate, rightDate) {                
+                const l = leftDate || this.leftDate; 
+                const r = rightDate || this.rightDate;
+                const monthDiff = r.getMonth() - l.getMonth();
+                const yearDiff = r.getFullYear() - l.getFullYear();
+
+                if (this.unlinkPanels) {
+                    if (yearDiff === 0 || (yearDiff === 1 && monthDiff <= 0)) {
+                        this.disableLinkYear = true;
+                    } else {
+                        this.disableLinkYear = false;
+                    }
+
+                    if ((monthDiff === 1 && yearDiff === 0) || (monthDiff === -11 && yearDiff === 1)) {
+                        this.disableLinkMonth = true;
+                    } else {
+                        this.disableLinkMonth = false;
+                    }
+                } else {
+                    this.disableLinkMonth = false;
+                    this.disableLinkYear = false;
+                }
+            },
+
             setDefRange () {
                 let startDate = isDate(this.value[0]) ? new Date(this.value[0]) : '';
                 let endDate = isDate(this.value[1]) ? new Date(this.value[1]) : '';
@@ -230,43 +276,56 @@
             },
 
             changeLeftMonth (delta) {
-                const leftDate = this.leftDate;
-                this.leftDate = nextMonth(leftDate, delta);
+                // left panel date
+                if (delta === 1 && this.disableLinkMonth) {
+                    return;
+                }
+                this.leftDate = nextMonth(this.leftDate, delta);
 
                 if (!this.unlinkPanels) {
-                    const rightDate = this.rightDate;
-                    this.rightDate = nextMonth(rightDate, delta);
+                    this.rightDate = nextMonth(this.rightDate, delta);
                 }
+                this.changeLinkStatus(this.leftDate, null);
             },
 
             changeLeftYear (delta) {
-                const leftDate = this.leftDate;
-                this.leftDate = nextYear(leftDate, delta);
+                // left panel date
+                if (delta === 1 && this.disableLinkYear) {
+                    return;
+                }
+                this.leftDate = nextYear(this.leftDate, delta);
 
                 if (!this.unlinkPanels) {
-                    const rightDate = this.rightDate;
-                    this.rightDate = nextYear(rightDate, delta);
+                    this.rightDate = nextYear(this.rightDate, delta);
                 }
+
+                this.changeLinkStatus(this.leftDate, null);
             },
 
             changeRightMonth (delta) {
-                const rightDate = this.rightDate;
-                this.rightDate = nextMonth(rightDate, delta);
+                // right panel date
+                if (delta === -1 && this.disableLinkMonth) {
+                    return;
+                }
+                this.rightDate = nextMonth(this.rightDate, delta);
 
                 if (!this.unlinkPanels) {
-                    const leftDate = this.leftDate;
-                    this.leftDate = nextMonth(leftDate, delta);
+                    this.leftDate = nextMonth(this.leftDate, delta);
                 }
+                this.changeLinkStatus(null, this.rightDate);
             },
 
             changeRightYear (delta) {
-                const rightDate = this.rightDate;
-                this.rightDate = nextYear(rightDate, delta);
+                // right panel date
+                if (delta === -1 && this.disableLinkYear) {
+                    return;
+                }
+                this.rightDate = nextYear(this.rightDate, delta);
 
                 if (!this.unlinkPanels) {
-                    const leftDate = this.leftDate;
-                    this.leftDate = nextYear(leftDate, delta);
+                    this.leftDate = nextYear(this.leftDate, delta);
                 }
+                this.changeLinkStatus(null, this.rightDate);
             },
 
             handleEndDateChange (date) {
@@ -343,6 +402,7 @@
 
         mounted () {
             window.document.addEventListener('click', this.handleDocClick, false);
+            this.changeLinkStatus(this.leftDate, this.rightDate);
         },
 
         beforeDestroy () {

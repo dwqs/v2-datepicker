@@ -169,6 +169,7 @@
     position: relative;
     height: 16px;
     width: 20px;
+    cursor: pointer;
     // E1E2E6
     &.v2-toggle-icon__prev-year {
         &::before, &::after {
@@ -230,6 +231,17 @@
         }
         &::after {
             right: 10px;
+        }
+    }
+    &.v2-toggle-icon-disabled {
+        cursor: not-allowed;
+        &.v2-toggle-icon__right-prev-year, &.v2-toggle-icon__left-next-year,
+        &.v2-toggle-icon__right-prev-month, &.v2-toggle-icon__left-next-month  {
+            &:hover {
+                &::before, &::after {
+                    border-color: #8ea0b7
+                }
+            }
         }
     }
 }
