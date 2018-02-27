@@ -1,10 +1,12 @@
 ![npm-version](https://img.shields.io/npm/v/v2-datepicker.svg) ![license](https://img.shields.io/npm/l/v2-datepicker.svg)
+
+[中文 README](https://github.com/dwqs/v2-datepicker/blob/master/README_CN.md)
 # v2-datepicker
 A simple datepicker component based Vue 2.x.
 
 ## Installation
 
-Install the pkg with npm:
+npm:
 
 ```
 npm i --save v2-datepicker
@@ -15,7 +17,7 @@ or yarn
 yarn add  v2-datepicker
 ```
 
-## Usage
+## Get Started
 
 ```
 import Vue from 'vue';
@@ -38,7 +40,7 @@ export default {
         return {
             pickerOptions: {
                     shortcuts: [{
-                        text: '最近一周',
+                        text: 'Latest Week',
                         onClick (picker) {
                             const end = new Date();
                             const start = new Date();
@@ -46,7 +48,7 @@ export default {
                             picker.$emit('pick', [start, end]);
                         }
                     }, {
-                        text: '最近一月',
+                        text: 'Latest Month',
                         onClick (picker) {
                             const end = new Date();
                             const start = new Date();
@@ -54,7 +56,7 @@ export default {
                             picker.$emit('pick', [start, end]);
                         }
                     }, {
-                        text: '最近三月',
+                        text: 'Latest Three Month',
                         onClick (picker) {
                             const end = new Date();
                             const start = new Date();
@@ -65,19 +67,19 @@ export default {
                 },
             pickerOptions2: {
                 shortcuts: [{
-                    text: '今天',
+                    text: 'Today',
                     onClick (picker) {
                         picker.$emit('pick', new Date());
                     }
                 }, {
-                    text: '昨天',
+                    text: 'Yesterday',
                     onClick (picker) {
                         const date = new Date();
                         date.setTime(date.getTime() - 3600 * 1000 * 24);
                         picker.$emit('pick', date);
                     }
                 }, {
-                    text: '一周前',
+                    text: 'A week ago',
                     onClick (picker) {
                         const date = new Date();
                         date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
@@ -122,14 +124,15 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
-| text | String | - | - | title of the shortcut |
-| onClick | Function | - | - | callback function, triggers when the shortcut is clicked |
+| shortcuts | Object[] | - | - | a { text, onClick } object array to set shortcut options, check the table below |
+| disabledDate | Function | - | - | a function determining if a date is disabled with that date as its parameter. Should return a Boolean |
 
 ### shortcuts
 
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
-| shortcuts | Object[] | - | - | a { text, onClick } object array to set shortcut options, check the table below |
+| text | String | - | - | title of the shortcut |
+| onClick | Function | - | - | callback function, triggers when the shortcut is clicked |
 
 ## Event
 
