@@ -37,6 +37,12 @@
             selecting: {
                 type: Boolean,
                 default: false
+            },
+            options: {
+                type: Object,
+                default: () => {
+                    return {};
+                }
             }
         },
 
@@ -144,6 +150,11 @@
                         cell.isToday = time === getClearHoursTime(Date.now());
                         cell.isSelected = isDate(this.selectedDate) ? time === getClearHoursTime(new Date(this.selectedDate).getTime()) : false;
                         cell.date = d;
+                        
+                        // disable date
+                        if (this.options && typeof this.options.disabledDate === 'function') {
+                            cell.disabled = this.options.disabledDate(cell.date);
+                        }
 
                         cell.start = this.isStartDate(d);
                         cell.end = this.isEndDate(d);
@@ -178,6 +189,11 @@
                         classes.push('selected');
                     }
                 }
+
+                if (cell.disabled) {
+                    classes.push('disabled');
+                }
+
                 return classes.join(' ');
             },
 
@@ -192,7 +208,7 @@
                 const index = e.target.dataset ? e.target.dataset.index : e.target.getAttribute('data-index');
                 if (index) {
                     const cell = this.getCellInfoByIndex(index);
-                    if (cell.type === 'normal') {
+                    if (cell.type === 'normal' && !cell.disabled) {
                         const minTime = getClearHoursTime(this.minDate);
                         const maxTime = getClearHoursTime(cell.date.getTime());
 

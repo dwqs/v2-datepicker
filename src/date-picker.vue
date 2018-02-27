@@ -189,6 +189,12 @@
                         cell.isToday = time === getClearHoursTime(Date.now());
                         cell.isSelected = isDate(this.selectedDate) ? time === getClearHoursTime(new Date(this.selectedDate).getTime()) : false;
                         cell.date = d;
+
+                        // disable date
+                        if (this.pickerOptions && typeof this.pickerOptions.disabledDate === 'function') {
+                            cell.disabled = this.pickerOptions.disabledDate(cell.date);
+                        }
+
                         row.push(cell);
                     }
                     rows[i] = row;
@@ -206,6 +212,10 @@
                 if (cell.isSelected) {
                     classes.push('selected');
                 }
+                if (cell.disabled) {
+                    classes.push('disabled');
+                }
+
                 return classes.join(' ');
             },
 
@@ -240,6 +250,9 @@
                 const index = e.target.dataset ? e.target.dataset.index : e.target.getAttribute('data-index');
                 if (index) {
                     const cell = this.getCellInfoByIndex(index);
+                    if (cell.disabled) {
+                        return;
+                    }
                     this.selectedDate = formatDate(cell.date, this.format);
                     this.curDate = cell.date;
                     this.$emit('input', this.curDate);

@@ -327,6 +327,22 @@
         background: #ff6200;
         border-radius: 50%;
     }
+    &.disabled {
+        background-color: #f4f4f4;
+        opacity: 1;
+        cursor: not-allowed;
+        color: #ccc;
+        border-radius: 0;
+        &:hover {
+            color: #ccc;
+            background-color: #f4f4f4;
+        }
+        span {
+            color: #ccc;
+            background: #f4f4f4;
+            border-radius: 0;
+        }
+    }
 }
 
 // 日期范围选择
@@ -405,5 +421,21 @@
     &.end-date {
         border-top-right-radius: 22px;
         border-bottom-right-radius: 22px;
+    }
+    &.disabled {
+        background-color: #f4f4f4;
+        opacity: 1;
+        cursor: not-allowed;
+        color: #ccc;
+        border-radius: 0;
+        &:hover {
+            color: #ccc;
+            background-color: #f4f4f4;
+        }
+        span {
+            color: #ccc;
+            background: #f4f4f4;
+            border-radius: 0;
+        }
     }
 }

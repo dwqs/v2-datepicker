@@ -55,6 +55,7 @@
                         :min-date="startDate"
                         :max-date="endDate"
                         :selecting="selecting"
+                        :options="pickerOptions"
                         @end-date-change="handleEndDateChange"
                         @range-change="handleRangeChange">
                     </date-table>
@@ -89,6 +90,7 @@
                         :min-date="startDate"
                         :max-date="endDate"
                         :selecting="selecting"
+                        :options="pickerOptions"
                         @end-date-change="handleEndDateChange"
                         @range-change="handleRangeChange">
                     </date-table>
