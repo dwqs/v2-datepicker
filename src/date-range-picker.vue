@@ -342,9 +342,9 @@
                 this.shown = false;
                 this.selecting = false;
                 this.clickCount = 0;
-                this.$nextTick(() => {
-                    [this.leftDate, this.rightDate] = this.initDate(this.MONTH);
-                });
+                // this.$nextTick(() => {
+                //     [this.leftDate, this.rightDate] = this.initDate(this.MONTH);
+                // });
             },
 
             handleRangeChange (date, isResetStartDate) {
@@ -362,7 +362,11 @@
                     return;
                 }
 
-                if (this.clickCount === 2) {
+                if (this.clickCount >= 2) {
+                    if (date.getTime() === this.startDate.getTime()) {
+                        // this.clickCount = 1;
+                        return;
+                    }
                     this.endDate = date; // formatDate(date, this.format);
                 }
                 this.emitValue();
