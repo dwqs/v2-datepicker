@@ -106,6 +106,7 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 | placeholder | String | - | 选择日期/Choosing date... | placeholder text |
 | disabled | Boolean | - | false | disabled date-picker |
 | picker-options | Object | - | {} | additional options, check the table below |
+| render-row | Number | 6/7 | 7 | render rows of datepicker |
 
 ### The v2-daterange-picker component
 

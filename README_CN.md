@@ -105,6 +105,7 @@ export default {
 | placeholder | String | - | 选择日期/Choosing date... | 占位符 |
 | disabled | Boolean | - | false | 是否禁用选择器 |
 | picker-options | Object | - | {} | 当前时间日期选择器特有的选项参考下表 |
+| render-row | Number | 6/7 | 7 | 渲染的行数 |
 
 ### v2-daterange-picker 组件
 
