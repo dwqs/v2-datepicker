@@ -26,7 +26,7 @@
         <transition name="zoom-in-top">
             <div class="v2-picker-panel-wrap" v-show="shown" :style="{minWidth: minWidth + 'px'}">
                 <short-cuts v-if="shownSideBar" :shortcuts="pickerOptions.shortcuts" @pick="handleShortcutPick"></short-cuts>
-                <div class="v2-picker-panel" :style="{marginLeft: shownSideBar ? '110px' : '0'}">
+                <div class="v2-picker-panel" :style="{marginLeft: shownSideBar ? '110px' : '0', height: renderRow === 6 ? '300px' : '335px'}">
                     <div class="v2-picker-panel__header">
                         <div class="v2-picker-header__label">
                             <span class="v2-picker-header__label-text" v-html="formatYearMonthText()"></span>
@@ -101,17 +101,24 @@
                 default: () => {
                     return {};
                 }
+            },
+
+            renderRow: {
+                type: Number,
+                default: 7,
+                validator: val => [6, 7].includes(val)
             }
         },
 
         data () {
+            const initRenderRows = this.initRenderRows();
             return {
                 view: 'day',
                 selectedDate: '',
                 curDate: new Date(),
                 shown: false,
                 shownClear: false,
-                rows: [[], [], [], [], [], [], []],
+                rows: initRenderRows,
 
                 minWidth: 270,
                 shownSideBar: false
@@ -141,6 +148,14 @@
         },
 
         methods: {
+            initRenderRows () {
+                if (this.renderRow === 6) {
+                    return [[], [], [], [], [], []];
+                } else {
+                    return [[], [], [], [], [], [], []];
+                }
+            },
+
             setDefDate () {
                 this.curDate = new Date(this.value);
                 this.selectedDate = formatDate(this.curDate, this.format);
@@ -167,11 +182,12 @@
                 const lastDateOfMonth = getLastDateOfMonth(date);
                 const mod = (firstWeekDay + 7) % 7;
                 
-                const panelStartDate = new Date(curYear, curMonth, firstDateOfMonth.getDate() - (mod + 7));
+                const diff = this.renderRow === 6 ? mod : mod + 7;
+                const panelStartDate = new Date(curYear, curMonth, firstDateOfMonth.getDate() - diff);
                 // const daysOfPreMonth = getDaysOfMonth(panelStartDate.getFullYear(), panelStartDate.getMonth() + 1);
                 // firstWeekDay = (firstWeekDay === 0 ? 7 : firstWeekDay);
          
-                const rows = [[], [], [], [], [], [], []];
+                const rows = this.initRenderRows();
                 const minTime = firstDateOfMonth.getTime();
                 const maxTime = lastDateOfMonth.getTime();
                 let index = 0;
