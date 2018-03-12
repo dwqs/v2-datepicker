@@ -1,19 +1,34 @@
 import './index.less';
 
-import DatePicker from './date-picker.vue';
-import DatePickerRange from './date-range-picker.vue';
+import DatePicker from '../components/date-picker/index';
+import DatePickerRange from '../components/date-picker-range/index';
+
+const components = [
+    DatePicker,
+    DatePickerRange
+];
 
 function install (Vue) {
-    Vue.component(DatePickerRange.name, DatePickerRange);
-    Vue.component(DatePicker.name, DatePicker);
+    if (install.installed) return;
+    install.installed = true;
+    components.map(component => {
+        Vue.component(component.name, component);
+    });
 }
 
+export {
+    DatePicker,
+    DatePickerRange
+};
+
 const V2DatePicker = {
-    install
+    install,
+    DatePicker,
+    DatePickerRange
 };
 
 export default V2DatePicker;
 
 if (typeof window !== 'undefined' && window.Vue) {
-    window.Vue.use(V2DatePicker);
+    install(window.Vue);
 }
