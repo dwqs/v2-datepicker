@@ -21,6 +21,7 @@ yarn add  v2-datepicker
 
 ```
 import Vue from 'vue';
+import 'v2-datepicker/lib/index.css';   // v2 need to improt css
 import V2Datepicker from 'v2-datepicker';
 
 Vue.use(V2Datepicker)
@@ -93,6 +94,42 @@ export default {
 ```
 
 More demo to visit [here](https://dwqs.github.io/v2-datepicker).
+
+## On Demand Import
+> This feature just apply to v2
+
+You need to install [babel-plugin-on-demand-import](https://github.com/dwqs/babel-plugin-on-demand-import): 
+
+```
+npm i babel-plugin-on-demand-import -D
+```
+
+Then add it to your `.babelrc`: 
+
+```
+{
+    // ...
+    "plugins": [
+        ["on-demand-import" {
+            "libraryName": "v2-datepicker"
+        }]
+    ]
+}
+```
+
+```
+// Only import DatePicker component
+import { DatePicker } from 'v2-datepicker'; 
+Vue.use(DatePicker);
+
+<v2-datepicker v-model="val"></v2-datepicker>
+
+// Only import DatePickerRange component
+import { DatePickerRange } from 'v2-datepicker'; 
+Vue.use(DatePickerRange);
+
+<v2-datepicker-range v-model="val2"></v2-datepicker-range>
+```
 
 ## Available Props
 

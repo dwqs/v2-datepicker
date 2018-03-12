@@ -20,6 +20,7 @@ yarn add  v2-datepicker
 
 ```
 import Vue from 'vue';
+import 'v2-datepicker/lib/index.css';   // v2 需要单独引入 css
 import V2Datepicker from 'v2-datepicker';
 
 Vue.use(V2Datepicker)
@@ -92,6 +93,42 @@ export default {
 ```
 
 查看更多 [demo](https://dwqs.github.io/v2-datepicker).
+
+## 按需yin'ru
+> 仅适用于 v2
+
+首先安装 [babel-plugin-on-demand-import](https://github.com/dwqs/babel-plugin-on-demand-import): 
+
+```
+npm i babel-plugin-on-demand-import -D
+```
+
+修改 `.babelrc`: 
+
+```
+{
+    // ...
+    "plugins": [
+        ["on-demand-import" {
+            "libraryName": "v2-datepicker"
+        }]
+    ]
+}
+```
+
+```
+// Only import DatePicker component
+import { DatePicker } from 'v2-datepicker'; 
+Vue.use(DatePicker);
+
+<v2-datepicker v-model="val"></v2-datepicker>
+
+// Only import DatePickerRange component
+import { DatePickerRange } from 'v2-datepicker'; 
+Vue.use(DatePickerRange);
+
+<v2-datepicker-range v-model="val2"></v2-datepicker-range>
+```
 
 ## 可选属性
 
