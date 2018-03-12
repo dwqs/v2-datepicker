@@ -1,0 +1,4 @@
+{
+    "date-picker": "./components/date-picker/index.js",
+    "date-picker-range": "./components/date-picker-range/index.js"
+}

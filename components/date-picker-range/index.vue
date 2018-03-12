@@ -101,16 +101,16 @@
 </template>
 
 <script>
-    import locals from './locals';
+    import locals from '../../src/locals';
 
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
         getClearHoursTime, formatDate, contains
-    } from './utils';
+    } from '../../src/utils';
 
+    import ShortCuts from '../../src/shortcuts.vue';
     import DateTable from './date-table.vue';
-    import ShortCuts from './shortcuts.vue';
 
     export default {
         name: 'v2-datepicker-range',

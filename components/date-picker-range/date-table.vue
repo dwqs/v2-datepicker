@@ -17,13 +17,13 @@
 </template>
 
 <script>
-    import locals from './locals';
+    import locals from '../../src/locals';
 
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
         getClearHoursTime, formatDate, contains
-    } from './utils';
+    } from '../../src/utils';
 
     export default {
         props: {
