@@ -94,7 +94,7 @@ export default {
 
 查看更多 [demo](https://dwqs.github.io/v2-datepicker).
 
-## 按需yin'ru
+## 按需引入
 > 仅适用于 v2
 
 首先安装 [babel-plugin-on-demand-import](https://github.com/dwqs/babel-plugin-on-demand-import): 
