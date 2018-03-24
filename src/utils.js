@@ -126,3 +126,22 @@ export const contains = (root, target) => {
     }
     return false;
 };
+
+export const setPanelPosition = (panelHeight, wrapRect) => {
+    const wrapHeight = wrapRect.height;
+    const wrapTop = wrapRect.top;
+
+    const docHeight = document.documentElement.clientHeight;
+    const panelDefTop = wrapTop + wrapHeight;
+
+    const diff = docHeight - panelDefTop;
+    if (diff < panelHeight) {
+        if (wrapTop > panelHeight) {
+            return -(panelHeight + 10);
+        } else {
+            return diff - panelHeight;
+        }
+    } else {
+        return 32;
+    }
+};
