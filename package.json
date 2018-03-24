@@ -1,6 +1,6 @@
 {
   "name": "v2-datepicker",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "A simple datepicker component based Vue 2.x",
   "author": "dwqs",
   "license": "MIT",
