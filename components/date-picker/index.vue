@@ -5,7 +5,7 @@
             'is-disabled': disabled
         }
 
-    ]" @mouseover="shownClear=true" @mouseout="shownClear=false">
+    ]" @mouseover="shownClear=true" @mouseout="shownClear=false" ref="wrap">
         <span ref="trigger" :class="['v2-picker-trigger', {'empty-text': !selectedDate}]" @click="handleTriggerClick">{{selectedDate ? selectedDate : _placeholder}}</span>
         <!-- <i :class="['v2-trigger-icon', { 'active': shown }]" v-if="trigger"></i> -->
         <svg v-if="this.selectedDate && shownClear" class="v2-date-clear" @click="clearDate" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
@@ -23,10 +23,10 @@
             <path d="M563.2 395.636364c-32.581818 0-65.163636 0-97.745455 0 0 23.272727 0 41.890909 0 60.509091 32.581818 0 65.163636 0 97.745455 0C563.2 437.527273 563.2 418.909091 563.2 395.636364z" p-id="1941" fill="#797973"></path>
             <path d="M921.6 93.090909l-121.018182 0L800.581818 23.272727C800.581818 9.309091 791.272727 0 777.309091 0s-23.272727 9.309091-23.272727 23.272727L754.036364 93.090909l-218.763636 0L535.272727 23.272727C535.272727 9.309091 525.963636 0 512 0c-13.963636 0-23.272727 9.309091-23.272727 23.272727L488.727273 93.090909 274.618182 93.090909 274.618182 23.272727C274.618182 9.309091 265.309091 0 251.345455 0 237.381818 0 228.072727 9.309091 228.072727 23.272727L228.072727 93.090909 102.4 93.090909C46.545455 93.090909 0 139.636364 0 195.490909l0 721.454545C0 977.454545 46.545455 1024 102.4 1024l814.545455 0c55.854545 0 102.4-46.545455 102.4-102.4L1019.345455 195.490909C1024 139.636364 977.454545 93.090909 921.6 93.090909zM977.454545 921.6c0 32.581818-27.927273 55.854545-55.854545 55.854545L102.4 977.454545C74.472727 977.454545 46.545455 949.527273 46.545455 921.6L46.545455 195.490909C46.545455 167.563636 74.472727 139.636364 102.4 139.636364l121.018182 0 0 69.818182C228.072727 218.763636 237.381818 232.727273 251.345455 232.727273c13.963636 0 23.272727-9.309091 23.272727-23.272727L274.618182 139.636364l214.109091 0 0 69.818182C488.727273 218.763636 498.036364 232.727273 512 232.727273c13.963636 0 23.272727-9.309091 23.272727-23.272727L535.272727 139.636364l218.763636 0 0 69.818182c0 13.963636 9.309091 23.272727 23.272727 23.272727s23.272727-9.309091 23.272727-23.272727L800.581818 139.636364l121.018182 0C949.527273 139.636364 977.454545 167.563636 977.454545 195.490909L977.454545 921.6z" p-id="1942" fill="#797973"></path>
         </svg>    
-        <transition name="zoom-in-top">
-            <div class="v2-picker-panel-wrap" v-show="shown" :style="{minWidth: minWidth + 'px'}">
+        <transition name="zoom-in-top" @beforeEnter="handleBeforeEnter">
+            <div class="v2-picker-panel-wrap" v-show="shown" :style="{minWidth: minWidth + 'px', top: top + 'px'}">
                 <short-cuts v-if="shownSideBar" :shortcuts="pickerOptions.shortcuts" @pick="handleShortcutPick"></short-cuts>
-                <div class="v2-picker-panel" :style="{marginLeft: shownSideBar ? '110px' : '0', height: renderRow === 6 ? '300px' : '335px'}">
+                <div class="v2-picker-panel" ref="panel" :style="{marginLeft: shownSideBar ? '110px' : '0', height: renderRow === 6 ? '300px' : '335px'}">
                     <div class="v2-picker-panel__header">
                         <div class="v2-picker-header__label">
                             <span class="v2-picker-header__label-text" v-html="formatYearMonthText()"></span>
@@ -121,6 +121,8 @@
                 rows: initRenderRows,
 
                 minWidth: 270,
+                top: 32,
+                wrapRect: null,
                 shownSideBar: false
             };
         },
@@ -148,6 +150,32 @@
         },
 
         methods: {
+            handleBeforeEnter () {
+                this.$nextTick(() => {
+                    this.setPanelPosition();
+                });
+            },
+
+            setPanelPosition () {
+                const panelHeight = this.renderRow === 6 ? 305 : 340;
+                const wrapHeight = this.wrapRect.height;
+                const wrapTop = this.wrapRect.top;
+
+                const docHeight = document.documentElement.clientHeight;
+                const panelDefTop = wrapTop + wrapHeight;
+
+                const diff = docHeight - panelDefTop;
+                if (diff < panelHeight) {
+                    if (wrapTop > panelHeight) {
+                        this.top = -(panelHeight + 10);
+                    } else {
+                        this.top = diff - panelHeight;
+                    }
+                } else {
+                    this.top = 32;
+                }
+            },
+
             initRenderRows () {
                 if (this.renderRow === 6) {
                     return [[], [], [], [], [], []];
@@ -284,6 +312,13 @@
                 }
             },
 
+            handleDocResize (e) {
+                this.wrapRect = this.$refs.wrap.getBoundingClientRect();
+                this.$nextTick(() => {
+                    this.setPanelPosition();
+                });
+            },
+
             handleTriggerClick () {
                 if (this.disabled) {
                     return;
@@ -315,11 +350,16 @@
         },
 
         mounted () {
+            this.wrapRect = this.$refs.wrap.getBoundingClientRect();
+
             window.document.addEventListener('click', this.handleDocClick, false);
+            window.document.addEventListener('scroll', this.handleDocResize, false);
+            window.addEventListener('resize', this.handleDocResize, false);
         },
 
         beforeDestroy () {
-            window.document.removeEventListener('click', this.handleDocClick);
+            window.document.removeEventListener('click', this.handleDocClick, false);
+            window.removeEventListener('resize', this.handleDocResize, false);
         },
 
         components: {
