@@ -65,7 +65,7 @@
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
-        getClearHoursTime, formatDate, contains
+        getClearHoursTime, formatDate, contains, setPanelPosition
     } from '../../src/utils';
 
     import ShortCuts from '../../src/shortcuts.vue';
@@ -122,6 +122,7 @@
 
                 minWidth: 270,
                 top: 32,
+                panelHeight: null,
                 wrapRect: null,
                 shownSideBar: false
             };
@@ -152,28 +153,11 @@
         methods: {
             handleBeforeEnter () {
                 this.$nextTick(() => {
-                    this.setPanelPosition();
-                });
-            },
-
-            setPanelPosition () {
-                const panelHeight = this.renderRow === 6 ? 305 : 340;
-                const wrapHeight = this.wrapRect.height;
-                const wrapTop = this.wrapRect.top;
-
-                const docHeight = document.documentElement.clientHeight;
-                const panelDefTop = wrapTop + wrapHeight;
-
-                const diff = docHeight - panelDefTop;
-                if (diff < panelHeight) {
-                    if (wrapTop > panelHeight) {
-                        this.top = -(panelHeight + 10);
-                    } else {
-                        this.top = diff - panelHeight;
+                    if (!this.panelHeight) {
+                        this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
                     }
-                } else {
-                    this.top = 32;
-                }
+                    this.top = setPanelPosition(this.panelHeight, this.wrapRect);
+                });
             },
 
             initRenderRows () {
@@ -315,7 +299,10 @@
             handleDocResize (e) {
                 this.wrapRect = this.$refs.wrap.getBoundingClientRect();
                 this.$nextTick(() => {
-                    this.setPanelPosition();
+                    if (!this.panelHeight) {
+                        this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
+                    }
+                    this.top = setPanelPosition(this.panelHeight, this.wrapRect);
                 });
             },
 
@@ -351,6 +338,7 @@
 
         mounted () {
             this.wrapRect = this.$refs.wrap.getBoundingClientRect();
+            this.top = this.wrapRect.top;
 
             window.document.addEventListener('click', this.handleDocClick, false);
             window.document.addEventListener('scroll', this.handleDocResize, false);

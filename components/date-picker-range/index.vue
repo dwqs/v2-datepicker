@@ -171,6 +171,7 @@
                 shown: false,
                 shownClear: false,
                 top: 32,
+                panelHeight: null,
                 wrapRect: null,
                 minWidth: 540,
                 shownSideBar: false,
@@ -204,8 +205,10 @@
         methods: {
             handleBeforeEnter () {
                 this.$nextTick(() => {
-                    const panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
-                    this.top = setPanelPosition(panelHeight, this.wrapRect);
+                    if (!this.panelHeight) {
+                        this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
+                    }
+                    this.top = setPanelPosition(this.panelHeight, this.wrapRect);
                 });
             },
 
@@ -391,7 +394,10 @@
             handleDocResize () {
                 this.wrapRect = this.$refs.wrap.getBoundingClientRect();
                 this.$nextTick(() => {
-                    this.top = setPanelPosition(295, this.wrapRect);
+                    if (!this.panelHeight) {
+                        this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
+                    }
+                    this.top = setPanelPosition(this.panelHeight, this.wrapRect);
                 });
             },
 
