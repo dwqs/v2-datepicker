@@ -74,14 +74,16 @@
 .v2-date-wrap .v2-picker-trigger {
   position: relative;
   display: block;
+  height: 32px;
+  line-height: 32px;
+  padding-right: 20px;
+  padding-left: 12px;
   font-size: 14px;
   cursor: pointer;
   margin: 0;
   overflow: hidden;
-  padding: 8px 20px 7px 12px;
 }
 .v2-date-wrap .v2-picker-trigger.empty-text {
-  padding: 7px 20px 7px 12px;
   color: #c0c4cc;
 }
 .v2-date-wrap .v2-trigger-icon {
