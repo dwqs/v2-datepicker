@@ -1,7 +1,7 @@
 import './index.less';
 
-import DatePicker from '../components/date-picker/index';
-import DatePickerRange from '../components/date-picker-range/index';
+import DatePicker from '../components/date-picker/index.js';
+import DatePickerRange from '../components/date-picker-range/index.js';
 
 const components = [
     DatePicker,
