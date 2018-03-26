@@ -142,6 +142,6 @@ export const setPanelPosition = (panelHeight, wrapRect) => {
             return diff - panelHeight;
         }
     } else {
-        return 32;
+        return wrapHeight;
     }
 };
