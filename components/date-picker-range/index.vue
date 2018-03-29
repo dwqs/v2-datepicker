@@ -391,7 +391,7 @@
                 }
             },
 
-            handleDocResize () {
+            panelPosition () {
                 this.wrapRect = this.$refs.wrap.getBoundingClientRect();
                 this.$nextTick(() => {
                     if (!this.panelHeight) {
@@ -401,11 +401,23 @@
                 });
             },
 
+            handleDocResize () {
+                if (!this.shown) {
+                    return;
+                }
+                this.panelPosition();
+            },
+
             handleTriggerClick () {
                 if (this.disabled) {
                     return;
                 }
-                this.shown = !this.shown;
+                if (this.shown) {
+                    this.shown = false;
+                } else {
+                    this.panelPosition();
+                    this.shown = true;
+                }
             },
 
             handleShortcutPick (range) {
@@ -429,9 +441,6 @@
         },
 
         mounted () {
-            this.wrapRect = this.$refs.wrap.getBoundingClientRect();
-            this.top = this.wrapRect.top;
-
             window.document.addEventListener('click', this.handleDocClick, false);
             window.document.addEventListener('scroll', this.handleDocResize, false);
             window.addEventListener('resize', this.handleDocResize, false);
