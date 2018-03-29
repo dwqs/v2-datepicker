@@ -62,6 +62,13 @@ export const getLastDateOfMonth = date => {
     throw new Error(`getLastDateOfMonth: 1st parameter may be not a valid date`);
 };
 
+function getValidDate (year, month, date) {
+    // fix #5
+    // 进行上下月切换时，判断当前的日期是否超出了当前月的天数
+    const days = getDaysOfMonth(year, month + 1);
+    return date > days ? days : date;
+}
+
 export const nextDate = (date, offset = 1) => {
     if (isDate(date)) {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate() + offset);
@@ -71,7 +78,11 @@ export const nextDate = (date, offset = 1) => {
 
 export const nextMonth = (date, offset = 1) => {
     if (isDate(date)) {
-        return new Date(date.getFullYear(), date.getMonth() + offset, date.getDate());
+        const y = date.getFullYear();
+        const m = date.getMonth() + offset;
+        const d = date.getDate();
+
+        return new Date(y, m, getValidDate(y, m, d));
     }
     throw new Error(`nextMonth: 1st parameter may be not a valid date`);
 };
