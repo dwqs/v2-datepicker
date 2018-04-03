@@ -375,10 +375,6 @@
                 }
 
                 if (this.clickCount >= 2) {
-                    if (date.getTime() === this.startDate.getTime()) {
-                        // this.clickCount = 1;
-                        return;
-                    }
                     this.endDate = date; // formatDate(date, this.format);
                 }
                 this.emitValue();
