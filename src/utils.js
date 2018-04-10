@@ -138,21 +138,46 @@ export const contains = (root, target) => {
     return false;
 };
 
-export const setPanelPosition = (panelHeight, wrapRect) => {
+export const getPanelPosition = (panelHeight, panelWidth, wrapRect) => {
     const wrapHeight = wrapRect.height;
+    const wrapWidth = wrapRect.width;
     const wrapTop = wrapRect.top;
+    const wrapLeft = wrapRect.left;
 
     const docHeight = document.documentElement.clientHeight;
-    const panelDefTop = wrapTop + wrapHeight;
+    const docWidth = document.documentElement.clientWidth;
 
-    const diff = docHeight - panelDefTop;
-    if (diff < panelHeight) {
+    const panelDefTop = wrapTop + wrapHeight; 
+    const panelDefRight = wrapLeft + panelWidth; // panel 的右边界
+
+    let top = 0;
+    let left = 0;
+
+    const topDiff = docHeight - panelDefTop;
+    if (topDiff < panelHeight) {
         if (wrapTop > panelHeight) {
-            return -(panelHeight + 10);
+            top = -(panelHeight + 10);
         } else {
-            return diff - panelHeight;
+            top = topDiff - panelHeight;
         }
     } else {
-        return wrapHeight;
+        top = wrapHeight;
     }
+    // fix #7
+    const leftDiff = docWidth - panelDefRight;
+    if (leftDiff < 0) {
+        if (docWidth > wrapLeft) {
+            left = leftDiff;
+        } else {
+            // 偏移到左边界
+            left = -panelWidth;
+        }
+    } else {
+        left = 0;
+    }
+
+    return {
+        top,
+        left
+    };
 };

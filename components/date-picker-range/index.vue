@@ -23,7 +23,7 @@
             <path d="M921.6 93.090909l-121.018182 0L800.581818 23.272727C800.581818 9.309091 791.272727 0 777.309091 0s-23.272727 9.309091-23.272727 23.272727L754.036364 93.090909l-218.763636 0L535.272727 23.272727C535.272727 9.309091 525.963636 0 512 0c-13.963636 0-23.272727 9.309091-23.272727 23.272727L488.727273 93.090909 274.618182 93.090909 274.618182 23.272727C274.618182 9.309091 265.309091 0 251.345455 0 237.381818 0 228.072727 9.309091 228.072727 23.272727L228.072727 93.090909 102.4 93.090909C46.545455 93.090909 0 139.636364 0 195.490909l0 721.454545C0 977.454545 46.545455 1024 102.4 1024l814.545455 0c55.854545 0 102.4-46.545455 102.4-102.4L1019.345455 195.490909C1024 139.636364 977.454545 93.090909 921.6 93.090909zM977.454545 921.6c0 32.581818-27.927273 55.854545-55.854545 55.854545L102.4 977.454545C74.472727 977.454545 46.545455 949.527273 46.545455 921.6L46.545455 195.490909C46.545455 167.563636 74.472727 139.636364 102.4 139.636364l121.018182 0 0 69.818182C228.072727 218.763636 237.381818 232.727273 251.345455 232.727273c13.963636 0 23.272727-9.309091 23.272727-23.272727L274.618182 139.636364l214.109091 0 0 69.818182C488.727273 218.763636 498.036364 232.727273 512 232.727273c13.963636 0 23.272727-9.309091 23.272727-23.272727L535.272727 139.636364l218.763636 0 0 69.818182c0 13.963636 9.309091 23.272727 23.272727 23.272727s23.272727-9.309091 23.272727-23.272727L800.581818 139.636364l121.018182 0C949.527273 139.636364 977.454545 167.563636 977.454545 195.490909L977.454545 921.6z" p-id="1942" fill="#797973"></path>
         </svg>
         <transition name="zoom-in-top" @beforeEnter="handleBeforeEnter">
-            <div class="v2-picker-panel-wrap v2-picker-range-panel-wrap" ref="panel" v-show="shown" :style="{minWidth: minWidth + 'px', top: top + 'px'}">
+            <div class="v2-picker-panel-wrap v2-picker-range-panel-wrap" ref="panel" v-show="shown" :style="{minWidth: minWidth + 'px', top: top + 'px', left: left + 'px'}">
                 <short-cuts v-if="shownSideBar" :shortcuts="pickerOptions.shortcuts" @pick="handleShortcutPick"></short-cuts>
                 <div class="v2-picker-range-panel v2-picker-range__left-panel" :style="{marginLeft: shownSideBar ? '110px' : '0'}">
                     <div class="v2-picker-panel__header">
@@ -106,7 +106,7 @@
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
-        getClearHoursTime, formatDate, contains, setPanelPosition
+        getClearHoursTime, formatDate, contains, getPanelPosition
     } from '../../src/utils';
 
     import ShortCuts from '../../src/shortcuts.vue';
@@ -171,7 +171,9 @@
                 shown: false,
                 shownClear: false,
                 top: 32,
+                left: 0,
                 panelHeight: null,
+                panelWidth: null,
                 wrapRect: null,
                 minWidth: 540,
                 shownSideBar: false,
@@ -204,11 +206,9 @@
 
         methods: {
             handleBeforeEnter () {
+                this.wrapRect = this.$refs.wrap.getBoundingClientRect();
                 this.$nextTick(() => {
-                    if (!this.panelHeight) {
-                        this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
-                    }
-                    this.top = setPanelPosition(this.panelHeight, this.wrapRect);
+                    this.setPanelPosition();
                 });
             },
 
@@ -387,33 +387,35 @@
                 }
             },
 
-            panelPosition () {
-                this.wrapRect = this.$refs.wrap.getBoundingClientRect();
-                this.$nextTick(() => {
-                    if (!this.panelHeight) {
-                        this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
-                    }
-                    this.top = setPanelPosition(this.panelHeight, this.wrapRect);
-                });
+            setPanelPosition () {
+                if (!this.panelHeight) {
+                    this.panelHeight = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('height'));
+                }
+
+                if (!this.panelWidth) {
+                    this.panelWidth = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('width'));
+                }
+                            
+                const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
+                this.top = top;
+                this.left = left;
             },
 
             handleDocResize () {
                 if (!this.shown) {
                     return;
                 }
-                this.panelPosition();
+                this.wrapRect = this.$refs.wrap.getBoundingClientRect();
+                this.$nextTick(() => {
+                    this.setPanelPosition();
+                });
             },
 
             handleTriggerClick () {
                 if (this.disabled) {
                     return;
                 }
-                if (this.shown) {
-                    this.shown = false;
-                } else {
-                    this.panelPosition();
-                    this.shown = true;
-                }
+                this.shown = !this.shown;
             },
 
             handleShortcutPick (range) {
