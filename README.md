@@ -137,19 +137,20 @@ Vue.use(DatePickerRange);
 
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
-| value | Date | anything accepted by new Date | - | default date of the date-picker |
+| value | Date | anything accepted by new Date() | - | default date of the date-picker |
 | lang | String | cn(chinese)/en(english) | cn | set local language of the date-picker |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 选择日期/Choosing date... | placeholder text |
 | disabled | Boolean | - | false | disabled date-picker |
 | picker-options | Object | - | {} | additional options, check the table below |
 | render-row | Number | 6/7 | 7 | render rows of datepicker |
+| default-value | Date | anything accepted by new Date() | - | default date of the calendar |
 
 ### The v2-daterange-picker component
 
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
-| value | Array | anything accepted by new Date | - | default date of the daterange-picker |
+| value | Array | anything accepted by new Date() | - | default date of the daterange-picker |
 | lang | String | cn(chinese)/en(english) | cn | set local language of the daterange-picker |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 开始时间-结束时间/Choosing date range... | placeholder text |
@@ -157,6 +158,7 @@ Vue.use(DatePickerRange);
 | range-separator | String | - | '-' | range separator|
 | unlink-panels | Boolean | - | false | unlink two date-panels in range-picker|
 | picker-options | Object | - | {} | additional options, check the table below |
+| default-value | Date | anything accepted by new Date() | - | default date of the calendar |
 
 ## Picker Options
 

@@ -143,6 +143,7 @@ Vue.use(DatePickerRange);
 | disabled | Boolean | - | false | 是否禁用选择器 |
 | picker-options | Object | - | {} | 当前时间日期选择器特有的选项参考下表 |
 | render-row | Number | 6/7 | 7 | 渲染的行数 |
+| default-value | Date | 可被new Date()解析 | - | 选择器打开时默认显示的时间 |
 
 ### v2-daterange-picker 组件
 
@@ -156,6 +157,7 @@ Vue.use(DatePickerRange);
 | range-separator | String | - | '-' | 选择范围时的分隔符 |
 | unlink-panels | Boolean | - | false | 在范围选择器里取消两个日期面板之间的联动 |
 | picker-options | Object | - | {} | 当前时间日期选择器特有的选项参考下表 |
+| default-value | Date | 可被new Date()解析 | - | 选择器打开时默认显示的时间 |
 
 ## Picker Options
 
