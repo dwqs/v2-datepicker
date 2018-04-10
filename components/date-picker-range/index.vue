@@ -408,9 +408,9 @@
                     this.panelWidth = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('width'));
                 }
                             
-                const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
-                this.top = top - this.offsetTop;
-                this.left = left - this.offsetLeft;
+                const { top, left, isMinusOffsetTop, isMinusOffsetLeft } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
+                this.top = isMinusOffsetTop ? top - this.offsetTop : top;
+                this.left = isMinusOffsetLeft ? left - this.offsetLeft : left;
             },
 
             handleDocResize () {

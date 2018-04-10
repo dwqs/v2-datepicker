@@ -107,6 +107,18 @@
                 type: Number,
                 default: 7,
                 validator: val => [6, 7].includes(val)
+            },
+
+            // since 2.1.8
+            /* 用于计算 top/left 值时的额外偏移量 */
+            offsetLeft: {
+                type: Number,
+                default: 0
+            },
+
+            offsetTop: {
+                type: Number,
+                default: 0
             }
         },
 
@@ -304,9 +316,9 @@
                     this.panelWidth = parseInt(window.getComputedStyle(this.$refs.panel, null).getPropertyValue('width'));
                 }
                             
-                const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
-                this.top = top;
-                this.left = left;
+                const { top, left, isMinusOffsetTop, isMinusOffsetLeft } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
+                this.top = isMinusOffsetTop ? top - this.offsetTop : top;
+                this.left = isMinusOffsetLeft ? left - this.offsetLeft : left;
             },
 
             handleDocResize (e) {

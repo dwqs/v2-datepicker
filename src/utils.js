@@ -152,32 +152,44 @@ export const getPanelPosition = (panelHeight, panelWidth, wrapRect) => {
 
     let top = 0;
     let left = 0;
+    let isMinusOffsetLeft = false;
+    let isMinusOffsetTop = false;
 
     const topDiff = docHeight - panelDefTop;
     if (topDiff < panelHeight) {
         if (wrapTop > panelHeight) {
             top = -(panelHeight + 10);
+            isMinusOffsetTop = true;
         } else {
-            top = topDiff - panelHeight;
+            // topDiff - panelHeight
+            // 偏移到上边界
+            top = -panelHeight;
+            isMinusOffsetTop = false;
         }
     } else {
         top = wrapHeight;
+        isMinusOffsetTop = false;
     }
     // fix #7
     const leftDiff = docWidth - panelDefRight;
     if (leftDiff < 0) {
         if (docWidth > wrapLeft) {
             left = leftDiff;
+            isMinusOffsetLeft = true;
         } else {
             // 偏移到左边界
             left = -panelWidth;
+            isMinusOffsetLeft = false;
         }
     } else {
         left = 0;
+        isMinusOffsetLeft = false;
     }
 
     return {
         top,
-        left
+        left,
+        isMinusOffsetTop,
+        isMinusOffsetLeft
     };
 };
