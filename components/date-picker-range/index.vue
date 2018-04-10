@@ -158,6 +158,18 @@
                 default: () => {
                     return {};
                 }
+            },
+
+            // since 2.1.8
+            /* 用于计算 top/left 值时的额外偏移量 */
+            offsetLeft: {
+                type: Number,
+                default: 0
+            },
+
+            offsetTop: {
+                type: Number,
+                default: 0
             }
         },
 
@@ -397,8 +409,8 @@
                 }
                             
                 const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
-                this.top = top;
-                this.left = left;
+                this.top = top - this.offsetTop;
+                this.left = left - this.offsetLeft;
             },
 
             handleDocResize () {
