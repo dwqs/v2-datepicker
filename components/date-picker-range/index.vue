@@ -129,8 +129,6 @@
                 default: ' - '
             },
 
-            date: {},
-
             lang: {
                 type: String,
                 default: 'cn',
@@ -160,7 +158,12 @@
                 }
             },
 
-            // since 2.1.8
+            // since 2.2.0
+            defaultValue: {
+                // default date when open the datepicker
+            },
+
+            // since 2.2.0
             /* 用于计算 top/left 值时的额外偏移量 */
             offsetLeft: {
                 type: Number,
@@ -239,6 +242,11 @@
                     }
 
                     return [leftDate, rightDate];
+                }
+                // since 2.2.0
+                if (!this.unlinkPanels && isDate(this.defaultValue)) {
+                    const leftDate = new Date(this.defaultValue);
+                    return [leftDate, nextMonth(leftDate, 1)];
                 }
 
                 return [new Date(), nextMonth(new Date(), 1)];

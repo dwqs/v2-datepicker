@@ -109,7 +109,12 @@
                 validator: val => [6, 7].includes(val)
             },
 
-            // since 2.1.8
+            // since 2.2.0
+            defaultValue: {
+                // default date when open the datepicker
+            },
+
+            // since 2.2.0
             /* 用于计算 top/left 值时的额外偏移量 */
             offsetLeft: {
                 type: Number,
@@ -124,10 +129,12 @@
 
         data () {
             const initRenderRows = this.initRenderRows();
+            const initDate = this.initCurDate();
+            
             return {
                 view: 'day',
                 selectedDate: '',
-                curDate: new Date(),
+                curDate: initDate,
                 shown: false,
                 shownClear: false,
                 rows: initRenderRows,
@@ -165,6 +172,13 @@
         },
 
         methods: {
+            initCurDate () {
+                if (isDate(this.defaultValue)) {
+                    return new Date(this.defaultValue);
+                }
+                return new Date();
+            },
+
             handleBeforeEnter () {
                 this.wrapRect = this.$refs.wrap.getBoundingClientRect();
                 this.$nextTick(() => {
