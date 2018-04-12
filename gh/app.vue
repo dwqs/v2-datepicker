@@ -1,7 +1,7 @@
 <template>
     <div class="v2-datepicker-demo">
         <v-header></v-header>
-        <v-start></v-start>
+        <!-- <v-start></v-start> -->
         <v-main></v-main>
     </div>
 </template>
