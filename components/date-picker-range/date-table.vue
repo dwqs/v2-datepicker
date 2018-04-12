@@ -22,7 +22,7 @@
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
-        getClearHoursTime, formatDate, contains
+        getClearHoursTime, formatDate
     } from '../../src/utils';
 
     export default {
@@ -250,8 +250,8 @@
 
             handleMouseMove (e) {
                 if (this.selecting) {
-                    if (e.target.dataset.index) {
-                        const index = e.target.dataset.index;
+                    const index = e.target.dataset ? e.target.dataset.index : e.target.getAttribute('data-index');
+                    if (index) {
                         const cell = this.getCellInfoByIndex(index);
                         this.$emit('end-date-change', cell.date);
                     }
