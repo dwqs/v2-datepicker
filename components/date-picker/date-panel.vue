@@ -40,7 +40,7 @@
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
-        getClearHoursTime, formatDate, contains, getPanelPosition
+        getClearHoursTime, contains, getPanelPosition
     } from '../../src/utils';
 
     import ShortCuts from '../../src/shortcuts.vue';
@@ -56,7 +56,7 @@
 
                 shownSideBar: false,
                 date: new Date(), // 用于初始面板
-                displayDate: null, // 日期显示
+                selectedDate: null, // 选中的日期
                 rows: [],
                 pickerOptions: null,
                 lang: 'cn',
@@ -119,7 +119,7 @@
                         cell.text = d.getDate();
                         cell.type = time < minTime ? 'prev-month' : time > maxTime ? 'next-month' : 'normal';
                         cell.isToday = time === getClearHoursTime(Date.now());
-                        cell.isSelected = isDate(this.displayDate) ? time === getClearHoursTime(new Date(this.displayDate).getTime()) : false;
+                        cell.isSelected = isDate(this.selectedDate) ? time === getClearHoursTime(new Date(this.selectedDate).getTime()) : false;
                         cell.date = d;
 
                         // disable date
@@ -179,9 +179,9 @@
 
             shortcutPick (date) {
                 if (isDate(date)) {
-                    this.displayDate = formatDate(date, this.format);
+                    this.selectedDate = date;
                     this.date = date;
-                    this.$emit('select-date', this.date, this.displayDate);
+                    this.$emit('emit', this.selectedDate);
                     this.shown = false;
                 }
             },
@@ -200,11 +200,19 @@
                     if (cell.disabled) {
                         return;
                     }
-                    this.displayDate = formatDate(cell.date, this.format);
+                    this.selectedDate = cell.date;
                     this.date = cell.date;
-                    this.$emit('select-date', this.date, this.displayDate);
+                    this.$emit('emit', this.selectedDate);
                     this.shown = false;
                 }
+            },
+
+            clearDate () {
+                this.selectedDate = '';
+                this.shown = false;
+                this.$nextTick(() => {
+                    this.initDays();
+                });
             }
         },
 
@@ -212,12 +220,10 @@
             ShortCuts
         },
 
-        created () {
-
-        },
-
         mounted () {
             this.$on('pick', this.shortcutPick);
+            this.$on('clear', this.clearDate);
+
             this.$nextTick(() => {
                 if (this.pickerOptions && this.pickerOptions.shortcuts && Array.isArray(this.pickerOptions.shortcuts) && this.pickerOptions.shortcuts.length) {
                     this.shownSideBar = true;

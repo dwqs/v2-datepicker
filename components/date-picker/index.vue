@@ -33,7 +33,7 @@
         isDate, formatDate, contains, getPanelPosition
     } from '../../src/utils';
 
-    import DatePicker from './date';
+    import DatePickerPanel from './date-panel';
 
     export default {
         name: 'v2-datepicker',
@@ -126,10 +126,10 @@
                 }
                 this.wrapRect = this.$el.getBoundingClientRect();
                 if (!this.picker) {
-                    this.picker = new Vue(DatePicker).$mount();
+                    this.picker = new Vue(DatePickerPanel).$mount();
                     this.picker.pickerOptions = { ...this.pickerOptions };
                     this.picker.date = this.curDate;
-                    this.picker.displayDate = this.displayDate;
+                    this.picker.selectedDate = this.displayDate;
                     this.picker.lang = this.lang;
                     this.picker.format = this.format;
                     this.picker.renderRow = this.renderRow;
@@ -138,11 +138,11 @@
                         left: `${this.wrapRect.left}px`
                     };
 
-                    this.picker.$on('select-date', (date, displayDate) => {
+                    this.picker.$on('emit', (date) => {
                         this.curDate = date;
-                        this.displayDate = displayDate;
+                        this.displayDate = formatDate(date, this.format);
                         this.$emit('input', date);
-                        this.$emit('change', displayDate);
+                        this.$emit('change', date);
                     });
 
                     document.body.appendChild(this.picker.$el);
@@ -158,6 +158,7 @@
                 this.displayDate = ''; 
                 this.$emit('input', null);
                 this.$emit('change', null);
+                this.picker.$emit('clear');
             },
 
             handleDocClick (e) {
@@ -172,6 +173,10 @@
             },
 
             setPanelPosition () {
+                if (!this.picker.shown) {
+                    return;
+                }
+
                 if (!this.panelHeight) {
                     this.panelHeight = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue('height'));
                 }
@@ -216,12 +221,13 @@
             window.document.addEventListener('scroll', this.winResize, false);
             window.removeEventListener('resize', this.winResize, false);
 
-            this.winResize = null;
             if (this.picker) {
                 this.picker.$destroy();
                 this.picker.$off();
                 this.picker.$el.parentNode.removeChild(this.picker.$el);
             }
+            this.winResize = null;
+            this.picker = null;
         }
     };
 </script>
