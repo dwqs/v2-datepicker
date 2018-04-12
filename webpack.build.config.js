@@ -35,6 +35,16 @@ module.exports = {
             }
         ]
     },
+
+    externals: {
+        'vue': {
+            root: 'Vue',
+            commonjs: 'vue',
+            commonjs2: 'vue',
+            amd: 'vue'
+        }
+    },
+
     plugins: [
         new ExtractTextPlugin({
             filename: '[name].css'
@@ -57,4 +67,4 @@ module.exports = {
         new webpack.optimize.ModuleConcatenationPlugin(),
         new ProgressBarPlugin()
     ]
-}
+};

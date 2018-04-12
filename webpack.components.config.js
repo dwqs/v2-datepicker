@@ -10,6 +10,7 @@ module.exports = {
         filename: '[name].js',
         libraryTarget: 'commonjs2'
     },
+    
     module: {
         rules: [
             {
@@ -23,6 +24,16 @@ module.exports = {
             }
         ]
     },
+
+    externals: {
+        'vue': {
+            root: 'Vue',
+            commonjs: 'vue',
+            commonjs2: 'vue',
+            amd: 'vue'
+        }
+    },
+
     plugins: [
         new webpack.optimize.ModuleConcatenationPlugin()
     ]
