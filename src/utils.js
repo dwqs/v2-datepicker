@@ -139,57 +139,41 @@ export const contains = (root, target) => {
 };
 
 export const getPanelPosition = (panelHeight, panelWidth, wrapRect) => {
-    const wrapHeight = wrapRect.height;
-    const wrapWidth = wrapRect.width;
-    const wrapTop = wrapRect.top;
-    const wrapLeft = wrapRect.left;
+    const { top, bottom, left, right, height } = wrapRect;
+    const offset = 10;
 
-    const docHeight = document.documentElement.clientHeight;
-    const docWidth = document.documentElement.clientWidth;
+    const docHeight = document.documentElement.clientHeight || document.body.clientHeight;
+    const docScrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
+    const docWidth = document.documentElement.clientWidth || document.body.clientWidth;
+    const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
 
-    const panelDefTop = wrapTop + wrapHeight; 
-    const panelDefRight = wrapLeft + panelWidth; // panel 的右边界
+    const minNeedHeight = bottom + panelHeight + offset;
+    const minNeedWidth = left + panelWidth + offset;
 
-    let top = 0;
-    let left = 0;
-    let isMinusOffsetLeft = false;
-    let isMinusOffsetTop = false;
+    let panelTop = 0;
+    let panelLeft = 0;
 
-    const topDiff = docHeight - panelDefTop;
-    if (topDiff < panelHeight) {
-        if (wrapTop > panelHeight) {
-            top = -(panelHeight + 10);
-            isMinusOffsetTop = true;
-        } else {
-            // topDiff - panelHeight
-            // 偏移到上边界
-            top = -panelHeight;
-            isMinusOffsetTop = false;
-        }
+    if (docHeight > minNeedHeight) {
+        // bottom
+        panelTop = bottom;
+    } else if (top > (panelHeight + offset)) {
+        // top
+        panelTop = top - (panelHeight + offset);
     } else {
-        top = wrapHeight;
-        isMinusOffsetTop = false;
+        panelTop = bottom - (minNeedHeight - docHeight);
     }
-    // fix #7
-    const leftDiff = docWidth - panelDefRight;
-    if (leftDiff < 0) {
-        if (docWidth > wrapLeft) {
-            left = leftDiff;
-            isMinusOffsetLeft = true;
-        } else {
-            // 偏移到左边界
-            left = -panelWidth;
-            isMinusOffsetLeft = false;
-        }
+
+    if (docWidth > minNeedWidth) {
+        panelLeft = left;
+    } else if (left < docWidth) {
+        panelLeft = left - (minNeedWidth - docWidth);
     } else {
-        left = 0;
-        isMinusOffsetLeft = false;
+        // left
+        panelLeft = left - panelWidth;
     }
 
     return {
-        top,
-        left,
-        isMinusOffsetTop,
-        isMinusOffsetLeft
+        top: panelTop >= 0 ? panelTop : 0,
+        left: panelLeft >= 0 ? panelLeft : 0
     };
 };
