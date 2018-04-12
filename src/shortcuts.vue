@@ -17,9 +17,7 @@
         
         methods: {
             handleShortcutClick (shortcut) {
-                if (typeof shortcut.onClick === 'function') {
-                    shortcut.onClick(this);
-                }
+                this.$emit('shortcut-click', shortcut);
             }
         }
     };
