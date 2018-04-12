@@ -71,9 +71,7 @@
         cursor: pointer;
         margin: 0;
         overflow: hidden;
-        // padding: 8px 20px 7px 12px;
         &.empty-text {
-            // padding: 7px 20px 7px 12px;
             color: #c0c4cc
         }
     }
@@ -109,8 +107,7 @@
 }
 
 .v2-picker-panel-wrap {
-    position: absolute;
-    min-width: 135%;
+    position: fixed;
     z-index: 1500;
     border: 1px solid #ccc;
     border-radius: 2px;
@@ -127,11 +124,6 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-    // min-height: 275px;
-    // width: 100%;
-    width: 270px;
-    height: 335px;
-    overflow: hidden;
 }
 
 .v2-picker-panel__header {
@@ -363,9 +355,6 @@
 .v2-picker-range-panel-wrap {
     font-size: 0;
     box-sizing: border-box;
-    // min-width: 278%;
-    // width: 540px;
-    height: 295px;
 }
 
 .v2-picker-range-panel {
@@ -376,7 +365,6 @@
     margin: 0;
     font-size: 14px;
     box-sizing: border-box;
-    min-height: 275px;
     overflow: hidden;
     &.v2-picker-range__left-panel {
         border-right: 1px solid #edeef2; 
