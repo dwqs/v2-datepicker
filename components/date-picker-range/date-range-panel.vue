@@ -2,7 +2,7 @@
     <transition name="zoom-in-top">
             <div class="v2-picker-panel-wrap v2-picker-range-panel-wrap" ref="panel" v-show="shown" :style="position">
                 <short-cuts v-if="shownSideBar" :shortcuts="pickerOptions.shortcuts" @shortcut-click="handleShortcutPick"></short-cuts>
-                <div class="v2-picker-range-panel v2-picker-range__left-panel" :style="{marginLeft: shownSideBar ? '110px' : '0'}">
+                <div class="v2-picker-range-panel v2-picker-range__left-panel" :style="{paddingLeft: shownSideBar ? '110px' : '0'}">
                     <div class="v2-picker-panel__header">
                         <div class="v2-picker-header__label">
                             <span class="v2-picker-header__label-text" v-html="formatYearMonthText(1)"></span>
@@ -279,9 +279,6 @@
             this.$on('clear', this.clearDate);
             this.$nextTick(() => {
                 this.changeLinkStatus(this.leftDate, this.rightDate);
-                if (this.pickerOptions && this.pickerOptions.shortcuts && Array.isArray(this.pickerOptions.shortcuts) && this.pickerOptions.shortcuts.length) {
-                    this.shownSideBar = true;
-                }
             });
         }
     };

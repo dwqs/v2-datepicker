@@ -223,12 +223,6 @@
         mounted () {
             this.$on('pick', this.shortcutPick);
             this.$on('clear', this.clearDate);
-
-            this.$nextTick(() => {
-                if (this.pickerOptions && this.pickerOptions.shortcuts && Array.isArray(this.pickerOptions.shortcuts) && this.pickerOptions.shortcuts.length) {
-                    this.shownSideBar = true;
-                }
-            });
         }
     };
 </script>

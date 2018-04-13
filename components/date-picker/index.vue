@@ -123,6 +123,14 @@
                 this.displayDate = formatDate(this.curDate, this.format);
             },
 
+            shownSideBar () {
+                // fix #10
+                if (this.pickerOptions && this.pickerOptions.shortcuts && Array.isArray(this.pickerOptions.shortcuts) && this.pickerOptions.shortcuts.length) {
+                    return true;
+                }
+                return false;
+            },
+
             handleTriggerClick () {
                 if (this.disabled) {
                     return;
@@ -136,6 +144,7 @@
                     this.picker.lang = this.lang;
                     this.picker.format = this.format;
                     this.picker.renderRow = this.renderRow;
+                    this.picker.shownSideBar = this.shownSideBar();
                     this.picker.position = {
                         top: `${this.wrapRect.bottom}px`,
                         left: `${this.wrapRect.left}px`
