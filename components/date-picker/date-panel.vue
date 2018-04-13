@@ -35,15 +35,15 @@
 </template>
 
 <script>
-    import locals from '../../src/locals';
+    import locals from 'v2-datepicker/src/locals';
 
     import { 
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
         getClearHoursTime, contains, getPanelPosition
-    } from '../../src/utils';
+    } from 'v2-datepicker/src/utils';
 
-    import ShortCuts from '../../src/shortcuts.vue';
+    import ShortCuts from 'main/shortcuts.vue';
 
     export default {
         data () {

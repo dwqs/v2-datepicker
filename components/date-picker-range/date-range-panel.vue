@@ -77,14 +77,14 @@
 </template>
 
 <script>
-    import locals from '../../src/locals';
+    import locals from 'v2-datepicker/src/locals';
 
     import { 
         isDate, contains, getPanelPosition,
         nextMonth, nextYear
-    } from '../../src/utils';
+    } from 'v2-datepicker/src/utils';
 
-    import ShortCuts from '../../src/shortcuts.vue';
+    import ShortCuts from 'main/shortcuts.vue';
     import DateTable from './date-table.vue';
 
     export default {

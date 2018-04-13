@@ -27,13 +27,13 @@
 
 <script>
     import Vue from 'vue';
-    import debounce from '../../src/debounce';
+    import debounce from 'v2-datepicker/src/debounce';
 
     import { 
         isDate, formatDate, contains, getPanelPosition, nextMonth
-    } from '../../src/utils';
+    } from 'v2-datepicker/src/utils';
 
-    import pickerManage from '../../src/picker-manage';
+    import pickerManage from 'v2-datepicker/src/picker-manage';
 
     import DateRangePickerPanel from './date-range-panel';
 
