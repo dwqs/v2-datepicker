@@ -37,7 +37,7 @@
     "ilint": "npx eslint src/**/*.js src/**/*.vue",
     "fix": "npx eslint --fix src/**/*.js src/**/*.vue",
     "commitmsg": "npx commitlint -e",
-    "start": "npx webpack-dev-server --host localhost -d --port 3333 --inline --hot --open --history-api-fallback --config ./webpack.dev.config.js",
+    "start": "npx webpack-dev-server --host localhost -d --content-base dist/ --port 3333 --inline --hot --open --history-api-fallback --config ./webpack.dev.config.js",
     "build": "rm -rf dist && NODE_ENV=production npx webpack --config ./webpack.demo.config.js --hide-modules",
     "postbuild": "mv dist/index.html ./index.html"
   },

@@ -63,7 +63,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: 'index.html'
+            template: 'tpl.html'
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new ProgressBarPlugin()

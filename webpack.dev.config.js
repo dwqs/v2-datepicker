@@ -41,26 +41,11 @@ module.exports = {
         }
     },
     plugins: [
-
-        new ParallelUglifyPlugin({
-            workerCount: os.cpus().length,
-            cacheDir: '.cache/',
-            sourceMap: true,
-            uglifyJS: {
-                compress: {
-                    warnings: false,
-                    /* eslint-disable */
-                    drop_debugger: true,
-                    drop_console: true
-                },
-                mangle: true
-            }
-        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: './index.html'
+            template: 'tpl.html'
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new ProgressBarPlugin()
     ]
-}
+};
