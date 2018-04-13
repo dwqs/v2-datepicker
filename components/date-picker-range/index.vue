@@ -1,5 +1,5 @@
 <template>
-    <div :class="[
+    <div :pid="pid" :class="[
         'v2-date-wrap',
         'v2-date-range-wrap',
         {
@@ -32,6 +32,8 @@
     import { 
         isDate, formatDate, contains, getPanelPosition, nextMonth
     } from '../../src/utils';
+
+    import pickerManage from '../../src/picker-manage';
 
     import DateRangePickerPanel from './date-range-panel';
 
@@ -92,6 +94,7 @@
             const [initLeftDate, initRightDate] = this.initDate(MONTH);
 
             return {
+                pid: -1,
                 leftDate: initLeftDate,
                 rightDate: initRightDate,
                 shownClear: false,
@@ -202,16 +205,11 @@
                     };
 
                     this.picker.$on('emit', this.emitValue);
-                    this.picker.$on('select-date', (date, displayDate) => {
-                        // this.curDate = date;
-                        // this.displayDate = displayDate;
-                        // this.$emit('input', date);
-                        // this.$emit('change', displayDate);
-                    });
-
+                    this.pid = pickerManage.addPicker('range', this.picker);
                     document.body.appendChild(this.picker.$el);
                 } 
-            
+
+                pickerManage.updatePicker(this.pid);
                 this.picker.shown = !this.picker.shown;
                 this.$nextTick(() => {
                     this.setPanelPosition();
@@ -281,6 +279,8 @@
             }
             this.winResize = null;
             this.picker = null;
+
+            this.pid = pickerManage.deletePicker(this.pid);
         }
     };
 </script>

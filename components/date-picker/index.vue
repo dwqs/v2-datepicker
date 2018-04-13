@@ -1,5 +1,5 @@
 <template>
-    <div :class="[
+    <div :pid="pid" :class="[
         'v2-date-wrap',
         {
             'is-disabled': disabled
@@ -32,6 +32,8 @@
     import { 
         isDate, formatDate, contains, getPanelPosition
     } from '../../src/utils';
+
+    import pickerManage from '../../src/picker-manage';
 
     import DatePickerPanel from './date-panel';
 
@@ -80,6 +82,7 @@
             const initDate = this.initCurDate();
             
             return {
+                pid: -1,
                 view: 'day',
                 displayDate: '',
                 curDate: initDate,
@@ -144,10 +147,11 @@
                         this.$emit('input', date);
                         this.$emit('change', date);
                     });
-
+                    this.pid = pickerManage.addPicker('date', this.picker);
                     document.body.appendChild(this.picker.$el);
-                } 
-            
+                }
+
+                pickerManage.updatePicker(this.pid);
                 this.picker.shown = !this.picker.shown;
                 this.$nextTick(() => {
                     this.setPanelPosition();
@@ -228,6 +232,8 @@
             }
             this.winResize = null;
             this.picker = null;
+
+            this.pid = pickerManage.deletePicker(this.pid);
         }
     };
 </script>
