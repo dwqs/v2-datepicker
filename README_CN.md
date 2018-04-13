@@ -106,11 +106,23 @@ npm i babel-plugin-on-demand-import -D
 修改 `.babelrc`: 
 
 ```
+// v2
 {
     // ...
     "plugins": [
         ["on-demand-import" {
             "libraryName": "v2-datepicker"
+        }]
+    ]
+}
+
+// v3
+{
+    // ...
+    "plugins": [
+        ["on-demand-import" {
+            "libraryName": "v2-datepicker",
+            "libraryName": "lib/components"
         }]
     ]
 }

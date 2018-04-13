@@ -107,11 +107,23 @@ npm i babel-plugin-on-demand-import -D
 Then add it to your `.babelrc`: 
 
 ```
+// v2
 {
     // ...
     "plugins": [
         ["on-demand-import" {
             "libraryName": "v2-datepicker"
+        }]
+    ]
+}
+
+// v3
+{
+    // ...
+    "plugins": [
+        ["on-demand-import" {
+            "libraryName": "v2-datepicker",
+            "libraryName": "lib/components"
         }]
     ]
 }
