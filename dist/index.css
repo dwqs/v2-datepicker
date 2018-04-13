@@ -365,6 +365,7 @@
   font-size: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  white-space: nowrap;
 }
 .v2-picker-range-panel {
   position: relative;
