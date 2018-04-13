@@ -126,8 +126,7 @@
           transform: translateY(-50%);
 }
 .v2-picker-panel-wrap {
-  position: absolute;
-  min-width: 135%;
+  position: fixed;
   z-index: 1500;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -146,9 +145,6 @@
   margin: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  width: 270px;
-  height: 335px;
-  overflow: hidden;
 }
 .v2-picker-panel__header {
   position: relative;
@@ -369,7 +365,6 @@
   font-size: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  height: 295px;
 }
 .v2-picker-range-panel {
   position: relative;
@@ -379,7 +374,6 @@
   font-size: 14px;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  min-height: 275px;
   overflow: hidden;
 }
 .v2-picker-range-panel.v2-picker-range__left-panel {
