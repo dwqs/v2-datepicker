@@ -27,10 +27,7 @@ module.exports = {
             },
             {
                 test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'vue-style-loader',
-                    use: ['css-loader', 'postcss-loader', 'less-loader']
-                })
+                use: ['vue-style-loader', 'css-loader', 'postcss-loader', 'less-loader']
             }
         ]
     },
@@ -38,14 +35,12 @@ module.exports = {
         extensions: ['.vue', '.js'],
         modules: [path.join(__dirname, './node_modules')],
         alias: {
+            'vue$': 'vue/dist/vue.esm.js',
             'v2-datepicker': path.resolve(__dirname, './'),
             'main': path.resolve(__dirname, './src')
         }
     },
     plugins: [
-        new ExtractTextPlugin({
-            filename: '[name].css'
-        }),
 
         new ParallelUglifyPlugin({
             workerCount: os.cpus().length,
@@ -63,7 +58,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
-            template: 'index.html'
+            template: './index.html'
         }),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new ProgressBarPlugin()
