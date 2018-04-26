@@ -140,8 +140,8 @@
                         rightDate = nextMonth(leftDate, 1);
                     }
 
-                    // fix #12
-                    if (diff <= 0) {
+                    // fix #12/#13
+                    if (diff <= MONTH) {
                         rightDate = nextMonth(leftDate, 1);
                     }
 
@@ -217,7 +217,7 @@
                         top: `${this.wrapRect.bottom}px`,
                         left: `${this.wrapRect.left}px`
                     };
-                    
+
                     this.picker.$on('emit', this.emitValue);
                     this.pid = pickerManage.addPicker('range', this.picker);
                     document.body.appendChild(this.picker.$el);
