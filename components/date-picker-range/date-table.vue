@@ -240,7 +240,7 @@
                         const time = d.getTime();
 
                         cell.start = time === minTime;
-                        cell.end = time === maxTime && maxTime > minTime;
+                        cell.end = time === maxTime && maxTime >= minTime;
                         cell.inRange = time >= minTime && time <= maxTime;
                     }               
                     rows[i] = row;
