@@ -44,7 +44,7 @@
             lang: {
                 type: String,
                 default: 'cn',
-                validator: val => ['cn', 'en'].includes(val)
+                validator: val => ['cn', 'en','it'].includes(val)
             },
             format: {
                 type: String,
