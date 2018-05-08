@@ -210,7 +210,7 @@
                 }
                 if (this.lang === 'cn') {
                     return `${d.getFullYear()}&nbsp;年&nbsp;&nbsp;${d.getMonth() + 1}&nbsp;月`;
-                } else if (this.lang === 'en') {
+                } else if (this.lang === 'en' || this.lang === 'it') {
                     return `${d.getFullYear()}&nbsp;&nbsp;${locals[this.lang].months.original[d.getMonth()]}`;
                 }
             },
