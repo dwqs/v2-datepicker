@@ -46,3 +46,4 @@ converage
 reports
 .cache
 .happypack
+package-lock.json
