@@ -149,7 +149,7 @@ Vue.use(DatePickerRange);
 |   属性  |  类型  |  可选值  |  默认值  |  描述  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Date | 可被new Date()解析 | - | 默认的日期值 |
-| lang | String | cn(chinese)/en(english) | cn | 选择语言 |
+| lang | String | cn(chinese)/en(english)/it(italian) | cn | 选择语言 |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | 返回的日期格式 |
 | placeholder | String | - | 选择日期/Choosing date... | 占位符 |
 | disabled | Boolean | - | false | 是否禁用选择器 |
@@ -162,7 +162,7 @@ Vue.use(DatePickerRange);
 |   属性  |  类型  |  可选值  |  默认值  |  描述  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Array | 可被new Date()解析 | - | 默认的日期范围值 |
-| lang | String | cn(chinese)/en(english) | cn | 选择语言 |
+| lang | String | cn(chinese)/en(english)/it(italian) | cn | 选择语言 |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | 返回的日期格式 |
 | placeholder | String | - | 开始时间-结束时间/Choosing date range... | 占位符 |
 | disabled | Boolean | - | false | 是否禁用选择器 |
