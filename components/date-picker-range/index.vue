@@ -26,275 +26,293 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import debounce from 'v2-datepicker/src/debounce';
+import Vue from "vue"
+import debounce from "v2-datepicker/src/debounce"
 
-    import { 
-        isDate, formatDate, contains, getPanelPosition, nextMonth
-    } from 'v2-datepicker/src/utils';
+import { isDate, formatDate, contains, getPanelPosition, nextMonth } from "v2-datepicker/src/utils"
 
-    import pickerManage from 'v2-datepicker/src/picker-manage';
+import pickerManage from "v2-datepicker/src/picker-manage"
 
-    import DateRangePickerPanel from './date-range-panel';
+import DateRangePickerPanel from "./date-range-panel"
 
-    export default {
-        name: 'v2-datepicker-range',
-        props: {
-            value: {
-                
-            },
+export default {
+    name: "v2-datepicker-range",
+    props: {
+        value: {},
 
-            disabled: {
-                type: Boolean,
-                default: false
-            },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
 
-            rangeSeparator: {
-                type: String,
-                default: ' - '
-            },
+        rangeSeparator: {
+            type: String,
+            default: " - "
+        },
 
-            lang: {
-                type: String,
-                default: 'cn',
-                validator: val => ['cn', 'en', 'it'].includes(val)
-            },
+        lang: {
+            type: String,
+            default: "cn",
+            validator: val => ["cn", "en", "it", "es"].includes(val)
+        },
 
-            format: {
-                type: String,
-                default: 'yyyy/MM/dd'
-            },
+        format: {
+            type: String,
+            default: "yyyy/MM/dd"
+        },
 
-            placeholder: {
-                type: String,
-                default: '' 
-            },
+        placeholder: {
+            type: String,
+            default: ""
+        },
 
-            unlinkPanels: {
-                // 是否取消左右面板的联动
-                type: Boolean,
-                default: false
-            },
+        unlinkPanels: {
+            // 是否取消左右面板的联动
+            type: Boolean,
+            default: false
+        },
 
-            pickerOptions: {
-                type: Object,
-                default: () => {
-                    return {};
-                }
-            },
-
-            // since 2.2.0
-            defaultValue: {
-                // default date when open the datepicker
+        pickerOptions: {
+            type: Object,
+            default: () => {
+                return {}
             }
         },
 
-        data () {
-            const MONTH = 1000 * 3600 * 24 * 30;
-            const [initLeftDate, initRightDate] = this.initDate(MONTH);
-
-            return {
-                pid: -1,
-                leftDate: initLeftDate,
-                rightDate: initRightDate,
-                shownClear: false,
-
-                panelHeight: null,
-                panelWidth: null,
-                wrapRect: null,
-                picker: null,
-                startDate: null,
-                endDate: null,
-
-                displayDate: '',
-                MONTH: MONTH
-            };
-        },
-
-        computed: {
-            _placeholder () {
-                return this.placeholder ? this.placeholder : this.lang === 'cn' ? '开始时间 - 结束时间' : 'Choosing date range...';
-            }
-        },
-
-        watch: {
-            value (val) {
-                if (Array.isArray(val) && val.length === 2) {
-                    this.setDefRange();
-                }
-            }
-        },
-
-        methods: {
-            initDate (MONTH) {
-                if (Array.isArray(this.value) && this.value.length === 2) {
-                    let leftDate = isDate(this.value[0]) ? new Date(this.value[0]) : new Date();
-                    let rightDate = isDate(this.value[1]) ? new Date(this.value[1]) : nextMonth(new Date(), 1);
-
-                    if (leftDate.getTime() > rightDate.getTime()) {
-                        [leftDate, rightDate] = [rightDate, leftDate];
-                    }
-                    const diff = rightDate.getTime() - leftDate.getTime();
-
-                    if (!this.unlinkPanels && diff > MONTH) {
-                        rightDate = nextMonth(leftDate, 1);
-                    }
-
-                    // fix #12/#13
-                    if (diff <= MONTH) {
-                        rightDate = nextMonth(leftDate, 1);
-                    }
-
-                    return [leftDate, rightDate];
-                }
-                // since 2.2.0
-                if (!this.unlinkPanels && isDate(this.defaultValue)) {
-                    const leftDate = new Date(this.defaultValue);
-                    return [leftDate, nextMonth(leftDate, 1)];
-                }
-
-                return [new Date(), nextMonth(new Date(), 1)];
-            },
-
-            setDefRange () {
-                let startDate = isDate(this.value[0]) ? new Date(this.value[0]) : '';
-                let endDate = isDate(this.value[1]) ? new Date(this.value[1]) : '';
-                if (startDate && endDate) {
-                    if (startDate.getTime() > endDate.getTime()) {
-                        [startDate, endDate] = [endDate, startDate];
-                    }
-
-                    this.startDate = startDate;
-                    this.endDate = endDate;
-                    const formate = [formatDate(this.startDate, this.format), formatDate(this.endDate, this.format)];
-                    this.displayDate = formate.join(this.rangeSeparator);
-                }
-            },
-
-            clearDate () {
-                this.displayDate = '';
-                this.$emit('input', []);
-                this.$emit('change', []);
-                this.picker.$emit('clear');
-            },
-
-            emitValue (startDate, endDate) {
-                const formate = [formatDate(startDate, this.format), formatDate(endDate, this.format)];
-                this.displayDate = formate.join(this.rangeSeparator);
-                this.$emit('input', [startDate, endDate]);
-                this.$emit('change', [startDate, endDate]);
-                // this.$nextTick(() => {
-                //     [this.leftDate, this.rightDate] = this.initDate(this.MONTH);
-                // });
-            },
-
-            shownSideBar () {
-                // fix #10
-                if (this.pickerOptions && this.pickerOptions.shortcuts && Array.isArray(this.pickerOptions.shortcuts) && this.pickerOptions.shortcuts.length) {
-                    return true;
-                }
-                return false;
-            },
-
-            handleTriggerClick () {
-                if (this.disabled) {
-                    return;
-                }
-
-                this.wrapRect = this.$el.getBoundingClientRect();
-                if (!this.picker) {
-                    this.picker = new Vue(DateRangePickerPanel).$mount();
-                    this.picker.pickerOptions = { ...this.pickerOptions };
-                    this.picker.leftDate = this.leftDate;
-                    this.picker.rightDate = this.rightDate;
-                    this.picker.startDate = this.startDate;
-                    this.picker.endDate = this.endDate;
-                    this.picker.unlinkPanels = this.unlinkPanels;
-                    this.picker.lang = this.lang;
-                    this.picker.format = this.format;
-                    this.picker.shownSideBar = this.shownSideBar();
-                    this.picker.position = {
-                        top: `${this.wrapRect.bottom}px`,
-                        left: `${this.wrapRect.left}px`
-                    };
-
-                    this.picker.$on('emit', this.emitValue);
-                    this.pid = pickerManage.addPicker('range', this.picker);
-                    document.body.appendChild(this.picker.$el);
-                } 
-
-                pickerManage.updatePicker(this.pid);
-                this.picker.shown = !this.picker.shown;
-                this.$nextTick(() => {
-                    this.setPanelPosition();
-                });
-            },
-
-            handleDocClick (e) {
-                const target = e.target;
-                if (!this.picker) {
-                    return;
-                }
-
-                if (!contains(this.picker.$el, target) && this.picker.shown) {
-                    this.picker.shown = false;
-                }
-            },
-
-            setPanelPosition () {
-                if (!this.panelHeight) {
-                    this.panelHeight = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue('height'));
-                }
-                if (!this.panelWidth) {
-                    this.panelWidth = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue('width'));
-                }
-
-                const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
-                this.picker.position = {
-                    top: `${top}px`,
-                    left: `${left}px`
-                };
-            },
-
-            handleDocResize (e) {
-                if (!this.picker || !this.picker.shown) {
-                    return;
-                }
-                this.wrapRect = this.$el.getBoundingClientRect();
-                this.$nextTick(() => {
-                    this.setPanelPosition();
-                });
-            }
-        },
-
-        created () {
-            this.winResize = debounce(this.handleDocResize);
-        },
-
-        mounted () {
-            if (Array.isArray(this.value) && this.value.length === 2) {
-                this.setDefRange();
-            }
-
-            window.document.addEventListener('click', this.handleDocClick, false);
-            window.document.addEventListener('scroll', this.winResize, false);
-            window.addEventListener('resize', this.winResize, false);
-        },
-
-        beforeDestroy () {
-            window.document.removeEventListener('click', this.handleDocClick, false);
-            window.document.removeEventListener('scroll', this.handleDocResize, false);
-            window.removeEventListener('resize', this.handleDocResize, false);
-
-            if (this.picker) {
-                this.picker.$destroy();
-                this.picker.$off();
-                this.picker.$el.parentNode.removeChild(this.picker.$el);
-            }
-            this.winResize = null;
-            this.picker = null;
-
-            this.pid = pickerManage.deletePicker(this.pid);
+        // since 2.2.0
+        defaultValue: {
+            // default date when open the datepicker
         }
-    };
+    },
+
+    data() {
+        const MONTH = 1000 * 3600 * 24 * 30
+        const [initLeftDate, initRightDate] = this.initDate(MONTH)
+
+        return {
+            pid: -1,
+            leftDate: initLeftDate,
+            rightDate: initRightDate,
+            shownClear: false,
+
+            panelHeight: null,
+            panelWidth: null,
+            wrapRect: null,
+            picker: null,
+            startDate: null,
+            endDate: null,
+
+            displayDate: "",
+            MONTH: MONTH
+        }
+    },
+
+    computed: {
+        _placeholder() {
+            if (this.placeholder) {
+                return this.placeholder
+            }
+            let placeholder
+            switch (this.lang) {
+                case "es":
+                    placeholder = "Elegir el rango de fechas…"
+                    break
+                case "en":
+                    placeholder = "Choose a date range…"
+                    break
+                case "it":
+                    placeholder = "Seleziona un intervallo di date"
+                    break
+                default:
+                    placeholder = "开始时间 - 结束时间"
+            }
+            return placeholder
+        }
+    },
+
+    watch: {
+        value(val) {
+            if (Array.isArray(val) && val.length === 2) {
+                this.setDefRange()
+            }
+        }
+    },
+
+    methods: {
+        initDate(MONTH) {
+            if (Array.isArray(this.value) && this.value.length === 2) {
+                let leftDate = isDate(this.value[0]) ? new Date(this.value[0]) : new Date()
+                let rightDate = isDate(this.value[1]) ? new Date(this.value[1]) : nextMonth(new Date(), 1)
+
+                if (leftDate.getTime() > rightDate.getTime()) {
+                    ;[leftDate, rightDate] = [rightDate, leftDate]
+                }
+                const diff = rightDate.getTime() - leftDate.getTime()
+
+                if (!this.unlinkPanels && diff > MONTH) {
+                    rightDate = nextMonth(leftDate, 1)
+                }
+
+                // fix #12/#13
+                if (diff <= MONTH) {
+                    rightDate = nextMonth(leftDate, 1)
+                }
+
+                return [leftDate, rightDate]
+            }
+            // since 2.2.0
+            if (!this.unlinkPanels && isDate(this.defaultValue)) {
+                const leftDate = new Date(this.defaultValue)
+                return [leftDate, nextMonth(leftDate, 1)]
+            }
+
+            return [new Date(), nextMonth(new Date(), 1)]
+        },
+
+        setDefRange() {
+            let startDate = isDate(this.value[0]) ? new Date(this.value[0]) : ""
+            let endDate = isDate(this.value[1]) ? new Date(this.value[1]) : ""
+            if (startDate && endDate) {
+                if (startDate.getTime() > endDate.getTime()) {
+                    ;[startDate, endDate] = [endDate, startDate]
+                }
+
+                this.startDate = startDate
+                this.endDate = endDate
+                const formate = [formatDate(this.startDate, this.format), formatDate(this.endDate, this.format)]
+                this.displayDate = formate.join(this.rangeSeparator)
+            }
+        },
+
+        clearDate() {
+            this.displayDate = ""
+            this.$emit("input", [])
+            this.$emit("change", [])
+            this.picker.$emit("clear")
+        },
+
+        emitValue(startDate, endDate) {
+            const formate = [formatDate(startDate, this.format), formatDate(endDate, this.format)]
+            this.displayDate = formate.join(this.rangeSeparator)
+            this.$emit("input", [startDate, endDate])
+            this.$emit("change", [startDate, endDate])
+            // this.$nextTick(() => {
+            //     [this.leftDate, this.rightDate] = this.initDate(this.MONTH);
+            // });
+        },
+
+        shownSideBar() {
+            // fix #10
+            if (
+                this.pickerOptions &&
+                this.pickerOptions.shortcuts &&
+                Array.isArray(this.pickerOptions.shortcuts) &&
+                this.pickerOptions.shortcuts.length
+            ) {
+                return true
+            }
+            return false
+        },
+
+        handleTriggerClick() {
+            if (this.disabled) {
+                return
+            }
+
+            this.wrapRect = this.$el.getBoundingClientRect()
+            if (!this.picker) {
+                this.picker = new Vue(DateRangePickerPanel).$mount()
+                this.picker.pickerOptions = { ...this.pickerOptions }
+                this.picker.leftDate = this.leftDate
+                this.picker.rightDate = this.rightDate
+                this.picker.startDate = this.startDate
+                this.picker.endDate = this.endDate
+                this.picker.unlinkPanels = this.unlinkPanels
+                this.picker.lang = this.lang
+                this.picker.format = this.format
+                this.picker.shownSideBar = this.shownSideBar()
+                this.picker.position = {
+                    top: `${this.wrapRect.bottom}px`,
+                    left: `${this.wrapRect.left}px`
+                }
+
+                this.picker.$on("emit", this.emitValue)
+                this.pid = pickerManage.addPicker("range", this.picker)
+                document.body.appendChild(this.picker.$el)
+            }
+
+            pickerManage.updatePicker(this.pid)
+            this.picker.shown = !this.picker.shown
+            this.$nextTick(() => {
+                this.setPanelPosition()
+            })
+        },
+
+        handleDocClick(e) {
+            const target = e.target
+            if (!this.picker) {
+                return
+            }
+
+            if (!contains(this.picker.$el, target) && this.picker.shown) {
+                this.picker.shown = false
+            }
+        },
+
+        setPanelPosition() {
+            if (!this.panelHeight) {
+                this.panelHeight = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue("height"))
+            }
+            if (!this.panelWidth) {
+                this.panelWidth = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue("width"))
+            }
+
+            const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect)
+            this.picker.position = {
+                top: `${top}px`,
+                left: `${left}px`
+            }
+        },
+
+        handleDocResize(e) {
+            if (!this.picker || !this.picker.shown) {
+                return
+            }
+            this.wrapRect = this.$el.getBoundingClientRect()
+            this.$nextTick(() => {
+                this.setPanelPosition()
+            })
+        }
+    },
+
+    created() {
+        this.winResize = debounce(this.handleDocResize)
+    },
+
+    mounted() {
+        if (Array.isArray(this.value) && this.value.length === 2) {
+            this.setDefRange()
+        }
+
+        window.document.addEventListener("click", this.handleDocClick, false)
+        window.document.addEventListener("scroll", this.winResize, false)
+        window.addEventListener("resize", this.winResize, false)
+    },
+
+    beforeDestroy() {
+        window.document.removeEventListener("click", this.handleDocClick, false)
+        window.document.removeEventListener("scroll", this.handleDocResize, false)
+        window.removeEventListener("resize", this.handleDocResize, false)
+
+        if (this.picker) {
+            this.picker.$destroy()
+            this.picker.$off()
+            this.picker.$el.parentNode.removeChild(this.picker.$el)
+        }
+        this.winResize = null
+        this.picker = null
+
+        this.pid = pickerManage.deletePicker(this.pid)
+    }
+}
 </script>
