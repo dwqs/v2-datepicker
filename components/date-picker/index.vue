@@ -26,223 +26,243 @@
 </template>
 
 <script>
-    import Vue from 'vue';
-    import debounce from 'v2-datepicker/src/debounce';
+import Vue from "vue"
+import debounce from "v2-datepicker/src/debounce"
 
-    import { 
-        isDate, formatDate, contains, getPanelPosition
-    } from 'v2-datepicker/src/utils';
+import { isDate, formatDate, contains, getPanelPosition } from "v2-datepicker/src/utils"
 
-    import pickerManage from 'v2-datepicker/src/picker-manage';
+import pickerManage from "v2-datepicker/src/picker-manage"
 
-    import DatePickerPanel from './date-panel';
+import DatePickerPanel from "./date-panel"
 
-    export default {
-        name: 'v2-datepicker',
-        props: {
-            value: {},
-            lang: {
-                type: String,
-                default: 'cn',
-                validator: val => ['cn', 'en', 'it'].includes(val)
-            },
-            format: {
-                type: String,
-                default: 'yyyy/MM/dd'
-            },
-            disabled: {
-                type: Boolean,
-                default: false
-            },
-            placeholder: {
-                type: String,
-                default: '' 
-            },
+export default {
+    name: "v2-datepicker",
+    props: {
+        value: {},
+        lang: {
+            type: String,
+            default: "cn",
+            validator: val => ["cn", "en", "it", "es"].includes(val)
+        },
+        format: {
+            type: String,
+            default: "yyyy/MM/dd"
+        },
+        disabled: {
+            type: Boolean,
+            default: false
+        },
+        placeholder: {
+            type: String,
+            default: ""
+        },
 
-            pickerOptions: {
-                type: Object,
-                default: () => {
-                    return {};
-                }
-            },
-
-            renderRow: {
-                type: Number,
-                default: 7,
-                validator: val => [6, 7].includes(val)
-            },
-
-            // since 2.2.0
-            defaultValue: {
-                // default date when open the datepicker
+        pickerOptions: {
+            type: Object,
+            default: () => {
+                return {}
             }
         },
 
-        data () {
-            const initDate = this.initCurDate();
-            
-            return {
-                pid: -1,
-                view: 'day',
-                displayDate: '',
-                curDate: initDate,
-                shownClear: false,
-
-                panelHeight: null,
-                panelWidth: null,
-                wrapRect: null,
-
-                picker: null
-            };
+        renderRow: {
+            type: Number,
+            default: 7,
+            validator: val => [6, 7].includes(val)
         },
 
-        computed: {
-            _placeholder () {
-                return this.placeholder ? this.placeholder : this.lang === 'cn' ? '选择日期' : 'Choosing date...';
-            }
-        },
-
-        watch: {
-            value (val) {
-                if (isDate(val)) {
-                    this.setDefDate();
-                }
-            }
-        },
-
-        methods: {
-            initCurDate () {
-                if (isDate(this.defaultValue)) {
-                    return new Date(this.defaultValue);
-                }
-                return new Date();
-            },
-
-            setDefDate () {
-                this.curDate = new Date(this.value);
-                this.displayDate = formatDate(this.curDate, this.format);
-            },
-
-            shownSideBar () {
-                // fix #10
-                if (this.pickerOptions && this.pickerOptions.shortcuts && Array.isArray(this.pickerOptions.shortcuts) && this.pickerOptions.shortcuts.length) {
-                    return true;
-                }
-                return false;
-            },
-
-            handleTriggerClick () {
-                if (this.disabled) {
-                    return;
-                }
-                this.wrapRect = this.$el.getBoundingClientRect();
-                if (!this.picker) {
-                    this.picker = new Vue(DatePickerPanel).$mount();
-                    this.picker.pickerOptions = { ...this.pickerOptions };
-                    this.picker.date = this.curDate;
-                    this.picker.selectedDate = this.displayDate;
-                    this.picker.lang = this.lang;
-                    this.picker.format = this.format;
-                    this.picker.renderRow = this.renderRow;
-                    this.picker.shownSideBar = this.shownSideBar();
-                    this.picker.position = {
-                        top: `${this.wrapRect.bottom}px`,
-                        left: `${this.wrapRect.left}px`
-                    };
-
-                    this.picker.$on('emit', (date) => {
-                        this.curDate = date;
-                        this.displayDate = formatDate(date, this.format);
-                        this.$emit('input', date);
-                        this.$emit('change', date);
-                    });
-                    this.pid = pickerManage.addPicker('date', this.picker);
-                    document.body.appendChild(this.picker.$el);
-                }
-
-                pickerManage.updatePicker(this.pid);
-                this.picker.shown = !this.picker.shown;
-                this.$nextTick(() => {
-                    this.setPanelPosition();
-                });
-            },
-
-            clearDate () {
-                this.displayDate = ''; 
-                this.$emit('input', null);
-                this.$emit('change', null);
-                this.picker.$emit('clear');
-            },
-
-            handleDocClick (e) {
-                const target = e.target;
-                if (!this.picker) {
-                    return;
-                }
-
-                if (!contains(this.picker.$el, target) && this.picker.shown) {
-                    this.picker.shown = false;
-                }
-            },
-
-            setPanelPosition () {
-                if (!this.picker.shown) {
-                    return;
-                }
-
-                if (!this.panelHeight) {
-                    this.panelHeight = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue('height'));
-                }
-                if (!this.panelWidth) {
-                    this.panelWidth = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue('width'));
-                }
-
-                const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect);
-                this.picker.position = {
-                    top: `${top}px`,
-                    left: `${left}px`
-                };
-            },
-
-            handleDocResize (e) {
-                if (!this.picker || !this.picker.shown) {
-                    return;
-                }
-                this.wrapRect = this.$el.getBoundingClientRect();
-                this.$nextTick(() => {
-                    this.setPanelPosition();
-                });
-            }
-        },
-
-        created () {
-            this.winResize = debounce(this.handleDocResize);
-        },
-
-        mounted () {
-            if (this.value && isDate(this.value)) {
-                this.setDefDate();
-            }
-
-            window.document.addEventListener('click', this.handleDocClick, false);
-            window.document.addEventListener('scroll', this.winResize, false);
-            window.addEventListener('resize', this.winResize, false);
-        },
-
-        beforeDestroy () {
-            window.document.removeEventListener('click', this.handleDocClick, false);
-            window.document.addEventListener('scroll', this.winResize, false);
-            window.removeEventListener('resize', this.winResize, false);
-
-            if (this.picker) {
-                this.picker.$destroy();
-                this.picker.$off();
-                this.picker.$el.parentNode.removeChild(this.picker.$el);
-            }
-            this.winResize = null;
-            this.picker = null;
-
-            this.pid = pickerManage.deletePicker(this.pid);
+        // since 2.2.0
+        defaultValue: {
+            // default date when open the datepicker
         }
-    };
+    },
+
+    data() {
+        const initDate = this.initCurDate()
+
+        return {
+            pid: -1,
+            view: "day",
+            displayDate: "",
+            curDate: initDate,
+            shownClear: false,
+
+            panelHeight: null,
+            panelWidth: null,
+            wrapRect: null,
+
+            picker: null
+        }
+    },
+
+    computed: {
+        _placeholder() {
+            if (this.placeholder) {
+                return this.placeholder
+            }
+            let placeholder
+            switch (this.lang) {
+                case "es":
+                    placeholder = "Seleccionar fecha…"
+                    break
+                case "en":
+                    placeholder = "Choose a date…"
+                    break
+                case "it":
+                    placeholder = "Seleziona la data"
+                    break
+                default:
+                    placeholder = "选择日期"
+            }
+            return placeholder
+        }
+    },
+
+    watch: {
+        value(val) {
+            if (isDate(val)) {
+                this.setDefDate()
+            }
+        }
+    },
+
+    methods: {
+        initCurDate() {
+            if (isDate(this.defaultValue)) {
+                return new Date(this.defaultValue)
+            }
+            return new Date()
+        },
+
+        setDefDate() {
+            this.curDate = new Date(this.value)
+            this.displayDate = formatDate(this.curDate, this.format)
+        },
+
+        shownSideBar() {
+            // fix #10
+            if (
+                this.pickerOptions &&
+                this.pickerOptions.shortcuts &&
+                Array.isArray(this.pickerOptions.shortcuts) &&
+                this.pickerOptions.shortcuts.length
+            ) {
+                return true
+            }
+            return false
+        },
+
+        handleTriggerClick() {
+            if (this.disabled) {
+                return
+            }
+            this.wrapRect = this.$el.getBoundingClientRect()
+            if (!this.picker) {
+                this.picker = new Vue(DatePickerPanel).$mount()
+                this.picker.pickerOptions = { ...this.pickerOptions }
+                this.picker.date = this.curDate
+                this.picker.selectedDate = this.displayDate
+                this.picker.lang = this.lang
+                this.picker.format = this.format
+                this.picker.renderRow = this.renderRow
+                this.picker.shownSideBar = this.shownSideBar()
+                this.picker.position = {
+                    top: `${this.wrapRect.bottom}px`,
+                    left: `${this.wrapRect.left}px`
+                }
+
+                this.picker.$on("emit", date => {
+                    this.curDate = date
+                    this.displayDate = formatDate(date, this.format)
+                    this.$emit("input", date)
+                    this.$emit("change", date)
+                })
+                this.pid = pickerManage.addPicker("date", this.picker)
+                document.body.appendChild(this.picker.$el)
+            }
+
+            pickerManage.updatePicker(this.pid)
+            this.picker.shown = !this.picker.shown
+            this.$nextTick(() => {
+                this.setPanelPosition()
+            })
+        },
+
+        clearDate() {
+            this.displayDate = ""
+            this.$emit("input", null)
+            this.$emit("change", null)
+            this.picker.$emit("clear")
+        },
+
+        handleDocClick(e) {
+            const target = e.target
+            if (!this.picker) {
+                return
+            }
+
+            if (!contains(this.picker.$el, target) && this.picker.shown) {
+                this.picker.shown = false
+            }
+        },
+
+        setPanelPosition() {
+            if (!this.picker.shown) {
+                return
+            }
+
+            if (!this.panelHeight) {
+                this.panelHeight = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue("height"))
+            }
+            if (!this.panelWidth) {
+                this.panelWidth = parseInt(window.getComputedStyle(this.picker.$el, null).getPropertyValue("width"))
+            }
+
+            const { top, left } = getPanelPosition(this.panelHeight, this.panelWidth, this.wrapRect)
+            this.picker.position = {
+                top: `${top}px`,
+                left: `${left}px`
+            }
+        },
+
+        handleDocResize(e) {
+            if (!this.picker || !this.picker.shown) {
+                return
+            }
+            this.wrapRect = this.$el.getBoundingClientRect()
+            this.$nextTick(() => {
+                this.setPanelPosition()
+            })
+        }
+    },
+
+    created() {
+        this.winResize = debounce(this.handleDocResize)
+    },
+
+    mounted() {
+        if (this.value && isDate(this.value)) {
+            this.setDefDate()
+        }
+
+        window.document.addEventListener("click", this.handleDocClick, false)
+        window.document.addEventListener("scroll", this.winResize, false)
+        window.addEventListener("resize", this.winResize, false)
+    },
+
+    beforeDestroy() {
+        window.document.removeEventListener("click", this.handleDocClick, false)
+        window.document.addEventListener("scroll", this.winResize, false)
+        window.removeEventListener("resize", this.winResize, false)
+
+        if (this.picker) {
+            this.picker.$destroy()
+            this.picker.$off()
+            this.picker.$el.parentNode.removeChild(this.picker.$el)
+        }
+        this.winResize = null
+        this.picker = null
+
+        this.pid = pickerManage.deletePicker(this.pid)
+    }
+}
 </script>
