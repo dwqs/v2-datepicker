@@ -12,7 +12,8 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, './dist'),
-        filename: '[name].js'
+        filename: '[name].js',
+        publicPath: '/v2-datepicker/dist/'
     },
     module: {
         rules: [
