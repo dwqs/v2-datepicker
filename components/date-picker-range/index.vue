@@ -29,7 +29,7 @@
     import Vue from 'vue';
     import debounce from 'v2-datepicker/src/debounce';
 
-    import { 
+    import {
         isDate, formatDate, contains, getPanelPosition, nextMonth
     } from 'v2-datepicker/src/utils';
 
@@ -41,7 +41,7 @@
         name: 'v2-datepicker-range',
         props: {
             value: {
-                
+
             },
 
             disabled: {
@@ -67,7 +67,7 @@
 
             placeholder: {
                 type: String,
-                default: '' 
+                default: ''
             },
 
             unlinkPanels: {
@@ -175,7 +175,9 @@
                 this.displayDate = '';
                 this.$emit('input', []);
                 this.$emit('change', []);
-                this.picker.$emit('clear');
+                if (this.picker) {
+                    this.picker.$emit('clear');
+                }
             },
 
             emitValue (startDate, endDate) {
@@ -221,7 +223,7 @@
                     this.picker.$on('emit', this.emitValue);
                     this.pid = pickerManage.addPicker('range', this.picker);
                     document.body.appendChild(this.picker.$el);
-                } 
+                }
 
                 pickerManage.updatePicker(this.pid);
                 this.picker.shown = !this.picker.shown;
