@@ -29,7 +29,7 @@
     import Vue from 'vue';
     import debounce from 'v2-datepicker/src/debounce';
 
-    import { 
+    import {
         isDate, formatDate, contains, getPanelPosition
     } from 'v2-datepicker/src/utils';
 
@@ -44,7 +44,7 @@
             lang: {
                 type: String,
                 default: 'cn',
-                validator: val => ['cn', 'en', 'it', 'ru'].includes(val)
+                validator: val => ['cn', 'en', 'it', 'ru', 'es'].includes(val)
             },
             format: {
                 type: String,
@@ -56,7 +56,7 @@
             },
             placeholder: {
                 type: String,
-                default: '' 
+                default: ''
             },
 
             pickerOptions: {
@@ -80,7 +80,7 @@
 
         data () {
             const initDate = this.initCurDate();
-            
+
             return {
                 pid: -1,
                 view: 'day',
@@ -168,7 +168,7 @@
             },
 
             clearDate () {
-                this.displayDate = ''; 
+                this.displayDate = '';
                 this.$emit('input', null);
                 this.$emit('change', null);
                 this.picker.$emit('clear');
