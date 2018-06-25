@@ -57,7 +57,7 @@
             lang: {
                 type: String,
                 default: 'cn',
-                validator: val => ['cn', 'en', 'it', 'ru'].includes(val)
+                validator: val => ['cn', 'en', 'it', 'ru', 'es'].includes(val)
             },
 
             format: {

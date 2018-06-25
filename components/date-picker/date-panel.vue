@@ -37,7 +37,7 @@
 <script>
     import locals from 'v2-datepicker/src/locals';
 
-    import { 
+    import {
         nextDate, daysOfMonth, isDate, nextYear, nextMonth,
         getDaysOfMonth, getFirstDateOfMonth, getLastDateOfMonth,
         getClearHoursTime, contains, getPanelPosition
@@ -99,10 +99,10 @@
                 const daysOfMonth = getDaysOfMonth(curYear, curMonth + 1);
                 const lastDateOfMonth = getLastDateOfMonth(date);
                 const mod = (firstWeekDay + 7) % 7;
-                
+
                 const diff = this.renderRow === 6 ? mod : mod + 7;
                 const panelStartDate = new Date(curYear, curMonth, firstDateOfMonth.getDate() - diff);
-         
+
                 const rows = this.initRenderRows();
                 const minTime = firstDateOfMonth.getTime();
                 const maxTime = lastDateOfMonth.getTime();
@@ -166,7 +166,7 @@
                 const d = this.date;
                 if (this.lang === 'cn') {
                     return `${d.getFullYear()}&nbsp;年&nbsp;&nbsp;${d.getMonth() + 1}&nbsp;月`;
-                } else if (this.lang === 'en' || this.lang === 'it' || this.lang === 'ru') {
+                } else if (this.lang === 'en' || this.lang === 'it' || this.lang === 'ru' || this.lang === 'es') {
                     return `${d.getFullYear()}&nbsp;&nbsp;${locals[this.lang].months.original[d.getMonth()]}`;
                 }
             },

@@ -79,7 +79,7 @@
 <script>
     import locals from 'v2-datepicker/src/locals';
 
-    import { 
+    import {
         isDate, contains, getPanelPosition,
         nextMonth, nextYear
     } from 'v2-datepicker/src/utils';
@@ -100,7 +100,7 @@
                 unlinkPanels: false,
 
                 // 用于初始面板
-                rightDate: null, 
+                rightDate: null,
                 leftDate: null,
 
                 // 选择
@@ -125,8 +125,8 @@
         },
 
         methods: {
-            changeLinkStatus (leftDate, rightDate) {                
-                const l = leftDate || this.leftDate; 
+            changeLinkStatus (leftDate, rightDate) {
+                const l = leftDate || this.leftDate;
                 const r = rightDate || this.rightDate;
                 const monthDiff = r.getMonth() - l.getMonth();
                 const yearDiff = r.getFullYear() - l.getFullYear();
@@ -210,7 +210,7 @@
                 }
                 if (this.lang === 'cn') {
                     return `${d.getFullYear()}&nbsp;年&nbsp;&nbsp;${d.getMonth() + 1}&nbsp;月`;
-                } else if (this.lang === 'en' || this.lang === 'it' || this.lang === 'ru') {
+                } else if (this.lang === 'en' || this.lang === 'it' || this.lang === 'ru' || this.lang === 'es') {
                     return `${d.getFullYear()}&nbsp;&nbsp;${locals[this.lang].months.original[d.getMonth()]}`;
                 }
             },
@@ -222,7 +222,7 @@
             handleRangeChange (date, isResetStartDate) {
                 if (isResetStartDate) {
                     this.clickCount = 0;
-                } 
+                }
                 this.clickCount = this.clickCount + 1;
                 if (!this.selecting) {
                     this.selecting = true;
@@ -234,7 +234,7 @@
                 if (this.clickCount >= 2) {
                     this.endDate = date;
                 }
-                
+
                 this.$emit('emit', this.startDate, this.endDate);
                 this.shown = false;
                 this.selecting = false;

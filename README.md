@@ -98,13 +98,13 @@ More demo to visit [here](https://dwqs.github.io/v2-datepicker).
 ## On Demand Import
 > This feature just apply to v2
 
-You need to install [babel-plugin-on-demand-import](https://github.com/dwqs/babel-plugin-on-demand-import): 
+You need to install [babel-plugin-on-demand-import](https://github.com/dwqs/babel-plugin-on-demand-import):
 
 ```
 npm i babel-plugin-on-demand-import -D
 ```
 
-Then add it to your `.babelrc`: 
+Then add it to your `.babelrc`:
 
 ```
 // v2
@@ -131,13 +131,13 @@ Then add it to your `.babelrc`:
 
 ```
 // Only import DatePicker component
-import { DatePicker } from 'v2-datepicker'; 
+import { DatePicker } from 'v2-datepicker';
 Vue.use(DatePicker);
 
 <v2-datepicker v-model="val"></v2-datepicker>
 
 // Only import DatePickerRange component
-import { DatePickerRange } from 'v2-datepicker'; 
+import { DatePickerRange } from 'v2-datepicker';
 Vue.use(DatePickerRange);
 
 <v2-datepicker-range v-model="val2"></v2-datepicker-range>
@@ -150,7 +150,7 @@ Vue.use(DatePickerRange);
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Date | anything accepted by new Date() | - | default date of the date-picker |
-| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian) | cn | set local language of the date-picker |
+| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian)/es(spanish) | cn | set local language of the date-picker |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 选择日期/Choosing date... | placeholder text |
 | disabled | Boolean | - | false | disabled date-picker |
@@ -163,7 +163,7 @@ Vue.use(DatePickerRange);
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Array | anything accepted by new Date() | - | default date of the daterange-picker |
-| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian) | cn | set local language of the daterange-picker |
+| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian)/es(spanish) | cn | set local language of the daterange-picker |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 开始时间-结束时间/Choosing date range... | placeholder text |
 | disabled | Boolean | - | false | disabled daterange-picker |
@@ -199,7 +199,7 @@ git clone git@github.com:dwqs/v2-datepicker.git
 
 cd v2-datepicker
 
-npm i 
+npm i
 
 npm start
 ```
