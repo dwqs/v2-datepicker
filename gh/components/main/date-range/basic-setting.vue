@@ -1,7 +1,7 @@
 <template>
     <div class="code-area">
         <div class="area-left">
-            <v2-datepicker-range format="MM/DD/YYYY" lang="en" v-model="selected"></v2-datepicker-range>
+            <v2-datepicker-range format="MM/DD/YYYY" lang="en"  v-model="selected"></v2-datepicker-range>
         </div>
         <div class="area-right">
             <pre><code>{{selected}}</code></pre>
@@ -16,11 +16,14 @@
 </template>
 
 <script>
+    import locals from '../../../locals.js';
     export default {
         data () {
             return {
                 selected: [],
-                shown: false
+                shown: false,
+                lang: 'it',
+                locals
             };
         },
         methods: {

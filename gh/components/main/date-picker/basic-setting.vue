@@ -16,11 +16,14 @@
 </template>
 
 <script>
+    import locals from '../../../locals.js';
     export default {
         data () {
             return {
                 selected: '',
-                shown: false
+                shown: false,
+                lang: 'ru',
+                locals
             };
         },
         methods: {
