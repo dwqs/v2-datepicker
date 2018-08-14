@@ -142,6 +142,44 @@ Vue.use(DatePickerRange);
 <v2-datepicker-range v-model="val2"></v2-datepicker-range>
 ```
 
+## Custom Locales
+The components native supports only two languages: cn(chinese) and en(english) since `v3.1.0`, if you want to custom locale, do it by `customLocals` prop:
+
+```js
+<template>
+  <v2-datepicker format="MM/DD/YYYY" :lang="lang" :customLocals="locals" v-model="date"></v2-datepicker>
+</template>
+
+// js
+import locals from 'path/to/your/locals'
+export default {
+  data () {
+    return {
+      lang: 'it',
+      locales
+    }
+  }
+}
+
+// locales.js
+export default {
+  'it': {
+    'months': {
+        'original': ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+        'abbr': ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic']
+    },
+    'days': ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab']
+  },
+  'lang-key': {
+     'months': {
+        'original': ['value1', 'value2', '...'],
+        'abbr': ['value1', 'value2', '...']
+     },
+     'days': ['value1', 'value2', '...']
+  }
+}
+```
+
 ## 可选属性
 
 ###  v2-datepicker 组件
@@ -149,7 +187,8 @@ Vue.use(DatePickerRange);
 |   属性  |  类型  |  可选值  |  默认值  |  描述  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Date | 可被new Date()解析 | - | 默认的日期值 |
-| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian)/es(spanish) | cn | 选择语言 |
+| lang | String | cn(chinese)/en(english) | cn | 选择语言 |
+| customLocals | Object | - | {} | custom locale |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | 返回的日期格式 |
 | placeholder | String | - | 选择日期/Choosing date... | 占位符 |
 | disabled | Boolean | - | false | 是否禁用选择器 |
@@ -162,7 +201,8 @@ Vue.use(DatePickerRange);
 |   属性  |  类型  |  可选值  |  默认值  |  描述  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Array | 可被new Date()解析 | - | 默认的日期范围值 |
-| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian) | cn | 选择语言 |
+| lang | String | cn(chinese)/en(english) | cn | 选择语言 |
+| customLocals | Object | - | {} | custom locale |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | 返回的日期格式 |
 | placeholder | String | - | 开始时间-结束时间/Choosing date range... | 占位符 |
 | disabled | Boolean | - | false | 是否禁用选择器 |

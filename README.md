@@ -143,6 +143,44 @@ Vue.use(DatePickerRange);
 <v2-datepicker-range v-model="val2"></v2-datepicker-range>
 ```
 
+## Custom Locales
+The components native supports only two languages: cn(chinese) and en(english) since `v3.1.0`, if you want to custom locale, do it by `customLocals` prop:
+
+```js
+<template>
+  <v2-datepicker format="MM/DD/YYYY" :lang="lang" :customLocals="locals" v-model="date"></v2-datepicker>
+</template>
+
+// js
+import locals from 'path/to/your/locals'
+export default {
+  data () {
+    return {
+      lang: 'it',
+      locales
+    }
+  }
+}
+
+// locales.js
+export default {
+  'it': {
+    'months': {
+        'original': ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'],
+        'abbr': ['Gen', 'Feb', 'Mar', 'Apr', 'Mag', 'Giu', 'Lug', 'Ago', 'Set', 'Ott', 'Nov', 'Dic']
+    },
+    'days': ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab']
+  },
+  'lang-key': {
+     'months': {
+        'original': ['value1', 'value2', '...'],
+        'abbr': ['value1', 'value2', '...']
+     },
+     'days': ['value1', 'value2', '...']
+  }
+}
+```
+
 ## Available Props
 
 ### The v2-datepicker component
@@ -150,7 +188,8 @@ Vue.use(DatePickerRange);
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Date | anything accepted by new Date() | - | default date of the date-picker |
-| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian)/es(spanish) | cn | set local language of the date-picker |
+| lang | String | cn(chinese)/en(english) | cn | set local language of the date-picker |
+| customLocals | Object | - | {} | custom locale |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 选择日期/Choosing date... | placeholder text |
 | disabled | Boolean | - | false | disabled date-picker |
@@ -163,7 +202,8 @@ Vue.use(DatePickerRange);
 |  Attribute  |  Type  |  Accepted Values  |  Default  |  Description  |
 |  :--:  |  :--:  |  :--:  |  :--:  |  :--:  |
 | value | Array | anything accepted by new Date() | - | default date of the daterange-picker |
-| lang | String | cn(chinese)/en(english)/it(italian)/ru(russian)/es(spanish) | cn | set local language of the daterange-picker |
+| lang | String | cn(chinese)/en(english) | cn | set local language of the daterange-picker |
+| customLocals | Object | - | {} | custom locale |
 | format | String | year `yyyy/YYYY`, month `MM`, day `dd` | yyyy/MM/dd | format of the displayed value in the span box |
 | placeholder | String | - | 开始时间-结束时间/Choosing date range... | placeholder text |
 | disabled | Boolean | - | false | disabled daterange-picker |
