@@ -28,6 +28,7 @@
                     </div>
                     <date-table
                         :lang="lang"
+                        :locals="customLocals"
                         :date="leftDate"
                         :min-date="startDate"
                         :max-date="endDate"
@@ -63,6 +64,7 @@
                     </div>
                     <date-table
                         :lang="lang"
+                        :locals="customLocals"
                         :date="rightDate"
                         :min-date="startDate"
                         :max-date="endDate"
@@ -112,16 +114,11 @@
                 pickerOptions: null,
                 lang: 'cn',
                 format: 'yyyy/MM/dd',
+                customLocals: {},
 
                 disableLinkMonth: false, // whether link when unlinkPanels is true for closed months.
                 disableLinkYear: false // whether link when unlinkPanels is true for closed years.
             };
-        },
-
-        computed: {
-            weekDaysLabel () {
-                return locals[this.lang] ? locals[this.lang].days : locals['cn'].days;
-            }
         },
 
         methods: {
@@ -210,8 +207,10 @@
                 }
                 if (this.lang === 'cn') {
                     return `${d.getFullYear()}&nbsp;年&nbsp;&nbsp;${d.getMonth() + 1}&nbsp;月`;
-                } else if (this.lang === 'en' || this.lang === 'it' || this.lang === 'ru' || this.lang === 'es') {
+                } else if (this.lang === 'en') {
                     return `${d.getFullYear()}&nbsp;&nbsp;${locals[this.lang].months.original[d.getMonth()]}`;
+                } else {
+                    return `${d.getFullYear()}&nbsp;&nbsp;${this.customLocals[this.lang].months.original[d.getMonth()]}`;
                 }
             },
 

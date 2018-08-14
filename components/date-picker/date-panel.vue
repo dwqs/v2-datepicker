@@ -60,6 +60,7 @@
                 rows: [],
                 pickerOptions: null,
                 lang: 'cn',
+                customLocals: {},
                 renderRow: 7,
                 format: 'yyyy/MM/dd'
             };
@@ -67,7 +68,13 @@
 
         computed: {
             weekDaysLabel () {
-                return locals[this.lang] ? locals[this.lang].days : locals['cn'].days;
+                if (locals[this.lang]) {
+                    return locals[this.lang].days;
+                } else if (this.customLocals[this.lang]) {
+                    return this.customLocals[this.lang].days;
+                } else {
+                    return locals['cn'].days;
+                }
             }
         },
 
@@ -166,8 +173,10 @@
                 const d = this.date;
                 if (this.lang === 'cn') {
                     return `${d.getFullYear()}&nbsp;年&nbsp;&nbsp;${d.getMonth() + 1}&nbsp;月`;
-                } else if (this.lang === 'en' || this.lang === 'it' || this.lang === 'ru' || this.lang === 'es') {
+                } else if (this.lang === 'en') {
                     return `${d.getFullYear()}&nbsp;&nbsp;${locals[this.lang].months.original[d.getMonth()]}`;
+                } else {
+                    return `${d.getFullYear()}&nbsp;&nbsp;${this.customLocals[this.lang].months.original[d.getMonth()]}`;
                 }
             },
 

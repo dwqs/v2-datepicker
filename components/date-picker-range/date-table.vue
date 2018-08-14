@@ -32,6 +32,10 @@
             },
 
             lang: String,
+            locals: {
+                type: Object,
+                default: () => {}
+            },
             minDate: '',
             maxDate: '',
             selecting: {
@@ -56,7 +60,13 @@
 
         computed: {
             weekDaysLabel () {
-                return locals[this.lang] ? locals[this.lang].days : locals['cn'].days;
+                if (locals[this.lang]) {
+                    return locals[this.lang].days;
+                } else if (this.locals[this.lang]) {
+                    return this.locals[this.lang].days;
+                } else {
+                    return locals['cn'].days;
+                }
             }
         },
 

@@ -56,8 +56,13 @@
 
             lang: {
                 type: String,
-                default: 'cn',
-                validator: val => ['cn', 'en', 'it', 'ru', 'es'].includes(val)
+                default: 'cn'
+                // validator: val => ['cn', 'en', 'it', 'ru', 'es'].includes(val)
+            },
+
+            customLocals: {
+                type: Object,
+                default: () => {}
             },
 
             format: {
@@ -213,6 +218,7 @@
                     this.picker.endDate = this.endDate;
                     this.picker.unlinkPanels = this.unlinkPanels;
                     this.picker.lang = this.lang;
+                    this.picker.customLocals = this.customLocals;
                     this.picker.format = this.format;
                     this.picker.shownSideBar = this.shownSideBar();
                     this.picker.position = {
