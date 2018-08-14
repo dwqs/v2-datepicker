@@ -111,6 +111,12 @@
                 if (isDate(val)) {
                     this.setDefDate();
                 }
+            },
+
+            lang (val) {
+                if (this.picker) {
+                    this.picker.lang = val;
+                }
             }
         },
 

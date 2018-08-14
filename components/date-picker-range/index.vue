@@ -127,6 +127,12 @@
                 if (Array.isArray(val) && val.length === 2) {
                     this.setDefRange();
                 }
+            },
+
+            lang (val) {
+                if (this.picker) {
+                    this.picker.lang = val;
+                }
             }
         },
 
